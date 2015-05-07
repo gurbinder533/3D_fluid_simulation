@@ -66,6 +66,56 @@ void Simulation::renderPlanes(bool transparent)
 {
     renderLock_.lock();
 
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glPushMatrix();
+    glTranslatef(0.0f, 0.0f, 6.0f);
+    // construct the cube
+        glBegin(GL_QUADS);
+
+        glColor4f (  0.8,  0.8, 0.8, 0.1);
+        glVertex3f(  0.5, -0.5, 0.5 );
+        glVertex3f(  0.5,  0.5, 0.5 );
+        glVertex3f( -0.5,  0.5, 0.5 );
+        glVertex3f( -0.5, -0.5, 0.5 );
+
+        glColor4f(  1.0,  0.0,  1.0, 0.1);
+        glVertex3f( 0.5, -0.5, -0.5 );
+        glVertex3f( 0.5,  0.5, -0.5 );
+        glVertex3f( 0.5,  0.5,  0.5 );
+        glVertex3f( 0.5, -0.5,  0.5 );
+
+        glColor4f(   0.0,  1.0,  0.0, 0.1);
+        glVertex3f( -0.5, -0.5,  0.5 );
+        glVertex3f( -0.5,  0.5,  0.5 );
+        glVertex3f( -0.5,  0.5, -0.5 );
+        glVertex3f( -0.5, -0.5, -0.5 );
+
+        glColor4f(   0.0,  0.0,  1.0 , 0.1);
+        glVertex3f(  0.5,  0.5,  0.5 );
+        glVertex3f(  0.5,  0.5, -0.5 );
+        glVertex3f( -0.5,  0.5, -0.5 );
+        glVertex3f( -0.5,  0.5,  0.5 );
+
+        glColor4f(   1.0,  0.0,  0.0, 0.1);
+        glVertex3f(  0.5, -0.5, -0.5 );
+        glVertex3f(  0.5, -0.5,  0.5 );
+        glVertex3f( -0.5, -0.5,  0.5 );
+        glVertex3f( -0.5, -0.5, -0.5 );
+
+        glColor4f(   1.0,  1.0, 0.0, 0.1);
+        glVertex3f(  0.5, -0.5, -0.5 );
+        glVertex3f(  0.5,  0.5, -0.5 );
+        glVertex3f( -0.5,  0.5, -0.5 );
+        glVertex3f( -0.5, -0.5, -0.5 );
+
+        glEnd();
+
+    glPopMatrix();
+
+
+
+    /*
     glEnable(GL_CULL_FACE);
     if(transparent)
     {
@@ -82,7 +132,7 @@ void Simulation::renderPlanes(bool transparent)
         renderPlane(*it, it == planes_.begin());
 
     glDisable(GL_CULL_FACE);
-
+*/
     renderLock_.unlock();
 }
 
@@ -113,6 +163,7 @@ void Simulation::renderPlane(const Plane &p, bool isFloor)
     Vector3d corner;
     */
 
+
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glPushMatrix();
@@ -120,37 +171,37 @@ void Simulation::renderPlane(const Plane &p, bool isFloor)
     // construct the cube
         glBegin(GL_QUADS);
 
-        glColor3f(   1.0,  1.0, 1.0 );
+        glColor4f (  0.8,  0.8, 0.8, 0.2);
         glVertex3f(  0.5, -0.5, 0.5 );
         glVertex3f(  0.5,  0.5, 0.5 );
         glVertex3f( -0.5,  0.5, 0.5 );
         glVertex3f( -0.5, -0.5, 0.5 );
 
-        glColor3f(  1.0,  0.0,  1.0 );
+        glColor4f(  1.0,  0.0,  1.0, 0.2);
         glVertex3f( 0.5, -0.5, -0.5 );
         glVertex3f( 0.5,  0.5, -0.5 );
         glVertex3f( 0.5,  0.5,  0.5 );
         glVertex3f( 0.5, -0.5,  0.5 );
 
-        glColor3f(   0.0,  1.0,  0.0 );
+        glColor4f(   0.0,  1.0,  0.0, 0.2);
         glVertex3f( -0.5, -0.5,  0.5 );
         glVertex3f( -0.5,  0.5,  0.5 );
         glVertex3f( -0.5,  0.5, -0.5 );
         glVertex3f( -0.5, -0.5, -0.5 );
 
-        glColor3f(   0.0,  0.0,  1.0 );
+        glColor4f(   0.0,  0.0,  1.0 , 0.2);
         glVertex3f(  0.5,  0.5,  0.5 );
         glVertex3f(  0.5,  0.5, -0.5 );
         glVertex3f( -0.5,  0.5, -0.5 );
         glVertex3f( -0.5,  0.5,  0.5 );
 
-        glColor3f(   1.0,  0.0,  0.0 );
+        glColor4f(   1.0,  0.0,  0.0, 0.2);
         glVertex3f(  0.5, -0.5, -0.5 );
         glVertex3f(  0.5, -0.5,  0.5 );
         glVertex3f( -0.5, -0.5,  0.5 );
         glVertex3f( -0.5, -0.5, -0.5 );
 
-        glColor3f(   1.0,  1.0, 0.0 );
+        glColor4f(   1.0,  1.0, 0.0, 0.2);
         glVertex3f(  0.5, -0.5, -0.5 );
         glVertex3f(  0.5,  0.5, -0.5 );
         glVertex3f( -0.5,  0.5, -0.5 );
