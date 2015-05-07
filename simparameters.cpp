@@ -2,23 +2,36 @@
 
 SimParameters::SimParameters()
 {
-    simRunning = false;
-    gameRunning = false;
+    simRunning = true;
+
     timeStep = 0.001;
-    NewtonMaxIters = 2000;
+    NewtonMaxIters = 20;
     NewtonTolerance = 1e-8;
 
-    activeForces = F_GRAVITY;
-    gravityG = -9.8;
-    penaltyStiffness = 1000000;
+    clickMode = CM_ADDDENSITY;
+    densityRadius = 2;
+    densityMagnitude = 1000;
+    velocityRadius = 3;
+    velocityMagnitude = 1000000;
+    diffusionConstant = 0.03;
+    viscosityFluid = 0.2;
 
-    bodyDensity = 1.0;
-    launchBody = R_SPHERE;
-    launchVel = 10;
-    randomLaunchOrientation = false;
-    randomLaunchAngVel = false;
-    randomLaunchVelMagnitude = 5.0;
+    connector = CT_SPRING;
 
-    coeffRestitution = 0.1;
-    coeffFriction = 1;
+    springStiffness = 100;
+    maxSpringStrain = 0.2;
+    dampingStiffness = 1.0;
+
+    particleMass = 1.0;
+    particleFixed = false;
+    maxSpringDist = 0.25;
+
+    rodDensity = 2.0;
+    rodStretchStiffness = 100.0;
+    rodBendingStiffness = 0.05;
+    rodSegments = 5;
+
+    ropeDensity = 2.0;
+    ropeBend = 0.01;
+    ropeSegments = 5;
 }

@@ -10,9 +10,6 @@
 #include <QGLWidget>
 #include "fluid.h"
 
-class RigidBodyTemplate;
-class RigidBodyInstance;
-
 typedef Eigen::Triplet<double> Tr;
 
 class SimParameters;
@@ -21,42 +18,6 @@ struct Plane
 {
     Eigen::Vector3d pos;
     Eigen::Vector3d normal;
-};
-
-struct Impulse
-{
-    Impulse(int body1, int body2, Eigen::Vector3d impactPoint, Eigen::Vector3d contactNormal, Eigen::Vector3d tangent1, Eigen::Vector3d tangent2, double impulseMagnitude)
-    {
-        this->body1 = body1;
-        this->body2 = body2;
-        this->impactPoint = impactPoint;
-        this->contactNormal = contactNormal;
-        this->tangent1 = tangent1;
-        this->tangent2 = tangent2;
-        this->impulseMagnitude = impulseMagnitude;
-        this->planeContact = false;
-    }
-
-    Impulse(int body1, Eigen::Vector3d impactPoint, Eigen::Vector3d contactNormal, Eigen::Vector3d tangent1, Eigen::Vector3d tangent2, double impulseMagnitude)
-    {
-        this->body1 = body1;
-        this->body2 = body1;
-        this->impactPoint = impactPoint;
-        this->contactNormal = contactNormal;
-        this->tangent1 = tangent1;
-        this->tangent2 = tangent2;
-        this->impulseMagnitude = impulseMagnitude;
-        this->planeContact = true;
-    }
-
-    int body1;
-    int body2;
-    Eigen::Vector3d impactPoint;
-    Eigen::Vector3d contactNormal;
-    Eigen::Vector3d tangent1;
-    Eigen::Vector3d tangent2;
-    double impulseMagnitude;
-    bool planeContact;
 };
 
 class Simulation
@@ -68,23 +29,31 @@ public:
     void takeSimulationStep();
     void initializeGL();
 
+    // FLUID STUFF
+///////////////////////////////////////////////
+   void render();
+   void fluidSimulationStep();
+   void advection(int boundary, Eigen::MatrixXd &d, Eigen::MatrixXd &dOld, Eigen::MatrixXd &uOld, Eigen::MatrixXd &vOld);
+   void diffuse(int boundary, Eigen::MatrixXd &d, Eigen::MatrixXd &dOld, double diffFactor);
+   void linearSolver(int b, Eigen::MatrixXd &x, Eigen::MatrixXd &xOld, double a, double c);
+   void project(Eigen::MatrixXd &x, Eigen::MatrixXd &y, Eigen::MatrixXd &xOld, Eigen::MatrixXd &yOld);
+   void swap(Eigen::MatrixXd &left, Eigen::MatrixXd &right);
+   void addSource(Eigen::MatrixXd &d, Eigen::MatrixXd& dOld);
+   void addVelocity(double x, double y, double velX, double velY);
+   void addDensity(double x, double y);
+   void setBoundry(int b, Eigen::MatrixXd& m);
+///////////////////////////////////////////////
+
+
     void renderPlanes(bool transparent);
-    void renderObjects();
     void clearScene();
-    void addRigidBody(Eigen::Vector3d pos, Eigen::Vector3d lookdir);
-    double computeSignedDistancePointToBody(Eigen::Vector3d point, RigidBodyInstance body);
-    Eigen::Vector3d signedDistanceGrad(Eigen::Vector3d point, RigidBodyInstance body);
-    void computeFrictionForces();
-    void setupGameMode();
 
 private:
     void loadFloorTexture();
     void loadWallTexture();
-    void loadRigidBodies();
 
     void renderPlane(const Plane &p, bool isFloor);
 
-    void computeForces(Eigen::VectorXd &Fc, Eigen::VectorXd &Ftheta);
 
     const SimParameters &params_;
     QMutex renderLock_;
@@ -93,12 +62,23 @@ private:
     GLuint floorTex_;
     GLuint wallTex_;
 
-    std::vector<RigidBodyTemplate *> templates_;
-    std::vector<RigidBodyInstance *> bodies_;
+    ////FLUID STUFF
+    Fluid *fluid_;
+    void buildConfiguration(Eigen::VectorXd &q, Eigen::VectorXd &qprev, Eigen::VectorXd &v);
+    void unbuildConfiguration(const Eigen::VectorXd &q, const Eigen::VectorXd &v);
+    void computeForceAndHessian(const Eigen::VectorXd &q, const Eigen::VectorXd &qprev, Eigen::VectorXd &F, Eigen::SparseMatrix<double> &H, Eigen::VectorXd &v);
+    void computeMassInverse(Eigen::SparseMatrix<double> &Minv);
+    Eigen::SparseMatrix<double> computeGradGTranspose(const Eigen::VectorXd &q);
+
+    void numericalIntegration(Eigen::VectorXd &q, Eigen::VectorXd &qprev, Eigen::VectorXd &v);
+    void computeStepProject(Eigen::VectorXd &q, Eigen::VectorXd &oldq, Eigen::VectorXd &v);
+    void computeLagrangeMultipliers(const Eigen::VectorXd &q, const Eigen::VectorXd &F, Eigen::VectorXd &v);
+
+
+    ////////////
+
 
     std::vector<Plane> planes_;
-    std::vector<Impulse *> impulses_;
-    bool gamewon;
 };
 
 #endif // SIMULATION_H

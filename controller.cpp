@@ -19,6 +19,9 @@ void Controller::initialize(MainWindow *mw)
 {
     mw_ = mw;
     sim_ = new Simulation(params_);
+    dragOn = false;
+    dragXOld = 0.0;
+    dragYOld = 0.0;
 }
 
 void Controller::initializeGL()
@@ -39,11 +42,6 @@ void Controller::reset()
     params_ = SimParameters();
     QMetaObject::invokeMethod(mw_, "setUIFromParameters", Q_ARG(SimParameters, params_));
     clearScene();
-}
-
-void Controller::setupGameMode()
-{
-    //sim_->setupGameMode();
 }
 
 void Controller::clearScene()
@@ -77,6 +75,58 @@ void Controller::mouseClicked(double x, double y, double z, double dx, double dy
 
 void Controller::simTick()
 {
-    //if(params_.simRunning)
-       // sim_->takeSimulationStep();
+    if(params_.simRunning)
+       sim_->takeSimulationStep();
+}
+
+void Controller::mouseDrag(double x, double y)
+{
+    if (!this->dragOn)
+    {
+        this->dragXOld = x;
+        this->dragYOld = y;
+        return;
+    }
+    double velToAdd = params_.velocityMagnitude;
+    double velX,velY;
+
+    velX = (x - this->dragXOld) * velToAdd;
+    velY = -(y - this->dragYOld) * velToAdd;
+
+    this->dragXOld = x;
+    this->dragYOld = y;
+
+    if(params_.simRunning)
+    {
+        switch(params_.clickMode)
+        {
+
+            case SimParameters::CM_ADDVELOCITY:
+                sim_->addVelocity(x, y, velX, velY);
+//                cout<<"Veloctiy"<<endl;
+                break;
+            case SimParameters::CM_ADDDENSITY:
+                sim_->addDensity(x,y);
+//                cout<<"Density"<<endl;
+                break;
+        }
+    }
+//    cout<<"Mouse Moved :"<<this->dragOn<<endl;
+}
+
+void Controller::resetDrag()
+{
+    this->dragXOld = 0;
+    this->dragYOld = 0;
+    this->dragOn = false;
+//    cout<<"Mouse Released :"<<this->dragOn<<endl;
+}
+
+void Controller::leftMouseClicked(double x, double y)
+{
+    if (!this->dragOn)
+    {
+        this->dragOn = true;
+    }
+//    cout<<"Left Mouse Clicked :"<<this->dragOn<<endl;
 }

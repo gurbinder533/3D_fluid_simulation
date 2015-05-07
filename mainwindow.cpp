@@ -30,6 +30,7 @@ void MainWindow::setParametersFromUI()
 {
     SimParameters params;
 
+    /*
     params.simRunning = simRunning_;
     params.gameRunning = gameRunning_;
 
@@ -68,13 +69,15 @@ void MainWindow::setParametersFromUI()
 
     params.coeffRestitution = ui->coeffRestitutionEdit->text().toDouble();
     params.coeffFriction = ui->coeffFrictionEdit->text().toDouble();
-
+*/
     setUIFromParameters(params);
     QMetaObject::invokeMethod(&cont_, "updateParameters", Q_ARG(SimParameters, params));
 }
 
 void MainWindow::setUIFromParameters(const SimParameters &params)
 {
+
+    /*
     if(params.simRunning)
     {
         ui->startSimulationButton->setText(QString("Pause Simulation"));
@@ -131,6 +134,7 @@ void MainWindow::setUIFromParameters(const SimParameters &params)
 
     ui->coeffRestitutionEdit->setText(QString::number(params.coeffRestitution));
     ui->coeffFrictionEdit->setText(QString::number(params.coeffFriction));
+    */
 }
 
 void MainWindow::updateGL()

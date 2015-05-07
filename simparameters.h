@@ -5,36 +5,42 @@ struct SimParameters
 {
     SimParameters();
 
-    const static int F_GRAVITY  = 1;
-    const static int F_FRICTION = 2;
-
-    const static int R_SPHERE  = 0;
-    const static int R_2BY4    = 1;
-    const static int R_BUNNY   = 2;
-    const static int R_CUSTOM  = 3;
-    const static int R_PLANE   = 4;
-    const static int R_PYRAMID = 5;
+    enum ClickMode {CM_ADDVELOCITY, CM_ADDDENSITY};
+    enum ConnectorType{ CT_SPRING, CT_RIGID_ROD, CT_FLEXIBLE_ROD, CT_ROPE};
 
     bool simRunning;
-    bool gameRunning;
+
     double timeStep;
     double NewtonTolerance;
     int NewtonMaxIters;
-    double penaltyStiffness;
 
-    int activeForces;
-    double gravityG;
+    ClickMode clickMode;
+    int densityRadius;
+    double densityMagnitude;
+    int velocityRadius;
+    double velocityMagnitude;
+    double diffusionConstant;
+    double viscosityFluid;
 
-    double bodyDensity;
-    int launchBody;
-    double launchVel;
-    bool randomLaunchOrientation;
 
-    bool randomLaunchAngVel;
-    double randomLaunchVelMagnitude;
+    ConnectorType connector;
 
-    double coeffRestitution;
-    double coeffFriction;
+    double springStiffness;
+    double maxSpringStrain;
+    double dampingStiffness;
+
+    double particleMass;
+    bool particleFixed;
+    double maxSpringDist;
+
+    double rodDensity;
+    double rodStretchStiffness;
+    double rodBendingStiffness;
+    int rodSegments;
+
+    double ropeDensity;
+    double ropeBend;
+    double ropeSegments;
 };
 
 #endif // SIMPARAMETERS_H

@@ -26,7 +26,9 @@ public slots:
     void clearScene();
     void updateParameters(SimParameters params);
     void mouseClicked(double x, double y, double z, double dx, double dy, double dz);
-    void setupGameMode();
+    void leftMouseClicked(double x, double y);
+    void resetDrag();
+    void mouseDrag(double x, double y);
     void simTick();
 
 protected:
@@ -37,6 +39,9 @@ private:
     Simulation *sim_;
     SimParameters params_;
 
+    bool dragOn;
+    double dragXOld;
+    double dragYOld;
     int fps_;
     QTimer simtimer_;
 };
