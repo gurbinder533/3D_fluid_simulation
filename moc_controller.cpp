@@ -22,7 +22,7 @@ static const uint qt_meta_data_Controller[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-       8,   14, // methods
+      10,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -36,8 +36,10 @@ static const uint qt_meta_data_Controller[] = {
       87,   72,   11,   11, 0x0a,
      147,  143,   11,   11, 0x0a,
      179,   11,   11,   11, 0x0a,
-     191,  143,   11,   11, 0x0a,
-     216,   11,   11,   11, 0x0a,
+     198,   11,   11,   11, 0x0a,
+     210,  143,   11,   11, 0x0a,
+     235,   11,   11,   11, 0x0a,
+     245,   11,   11,   11, 0x0a,
 
        0        // eod
 };
@@ -48,8 +50,9 @@ static const char qt_meta_stringdata_Controller[] = {
     "x,y,z,dx,dy,dz\0"
     "mouseClicked(double,double,double,double,double,double)\0"
     "x,y\0leftMouseClicked(double,double)\0"
-    "resetDrag()\0mouseDrag(double,double)\0"
-    "simTick()\0"
+    "keyToAddFluid(int)\0resetDrag()\0"
+    "mouseDrag(double,double)\0simTick()\0"
+    "renderFluid()\0"
 };
 
 void Controller::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
@@ -63,9 +66,11 @@ void Controller::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 2: _t->updateParameters((*reinterpret_cast< SimParameters(*)>(_a[1]))); break;
         case 3: _t->mouseClicked((*reinterpret_cast< double(*)>(_a[1])),(*reinterpret_cast< double(*)>(_a[2])),(*reinterpret_cast< double(*)>(_a[3])),(*reinterpret_cast< double(*)>(_a[4])),(*reinterpret_cast< double(*)>(_a[5])),(*reinterpret_cast< double(*)>(_a[6]))); break;
         case 4: _t->leftMouseClicked((*reinterpret_cast< double(*)>(_a[1])),(*reinterpret_cast< double(*)>(_a[2]))); break;
-        case 5: _t->resetDrag(); break;
-        case 6: _t->mouseDrag((*reinterpret_cast< double(*)>(_a[1])),(*reinterpret_cast< double(*)>(_a[2]))); break;
-        case 7: _t->simTick(); break;
+        case 5: _t->keyToAddFluid((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 6: _t->resetDrag(); break;
+        case 7: _t->mouseDrag((*reinterpret_cast< double(*)>(_a[1])),(*reinterpret_cast< double(*)>(_a[2]))); break;
+        case 8: _t->simTick(); break;
+        case 9: _t->renderFluid(); break;
         default: ;
         }
     }
@@ -103,9 +108,9 @@ int Controller::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 8)
+        if (_id < 10)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 8;
+        _id -= 10;
     }
     return _id;
 }

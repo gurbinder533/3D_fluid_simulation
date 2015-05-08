@@ -15,6 +15,8 @@ public:
     Eigen::MatrixXd vy, vyOld;
     Eigen::MatrixXd vx, vxOld;
 
+
+
     int n;
     double sizeOfVoxel;
     bool debug;

@@ -68,53 +68,57 @@ void Simulation::renderPlanes(bool transparent)
 {
     renderLock_.lock();
 
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    //glEnable(GL_BLEND);
+    //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glDisable(GL_BLEND);
     glPushMatrix();
-    glTranslatef(0.0f, 0.0f, 6.0f);
-    // construct the cube
-        glBegin(GL_QUADS);
+    // construct the cub
 
-        glColor4f (  0.8,  0.8, 0.8, 0.1);
-        glVertex3f(  0.5, -0.5, 0.5 );
-        glVertex3f(  0.5,  0.5, 0.5 );
-        glVertex3f( -0.5,  0.5, 0.5 );
-        glVertex3f( -0.5, -0.5, 0.5 );
+     glLineWidth(3.0);
+        glBegin(GL_LINES);
 
-        glColor4f(  1.0,  0.0,  1.0, 0.1);
-        glVertex3f( 0.5, -0.5, -0.5 );
-        glVertex3f( 0.5,  0.5, -0.5 );
-        glVertex3f( 0.5,  0.5,  0.5 );
-        glVertex3f( 0.5, -0.5,  0.5 );
+        glColor3f(1.0, 0.0, 0.0);
 
-        glColor4f(   0.0,  1.0,  0.0, 0.1);
-        glVertex3f( -0.5, -0.5,  0.5 );
-        glVertex3f( -0.5,  0.5,  0.5 );
-        glVertex3f( -0.5,  0.5, -0.5 );
-        glVertex3f( -0.5, -0.5, -0.5 );
+        glVertex3f(-1, -1, -1);
+        glVertex3f(-1, 1, -1);
 
-        glColor4f(   0.0,  0.0,  1.0 , 0.1);
-        glVertex3f(  0.5,  0.5,  0.5 );
-        glVertex3f(  0.5,  0.5, -0.5 );
-        glVertex3f( -0.5,  0.5, -0.5 );
-        glVertex3f( -0.5,  0.5,  0.5 );
+        glVertex3f(-1, -1, -1);
+        glVertex3f(1, -1, -1);
 
-        glColor4f(   1.0,  0.0,  0.0, 0.1);
-        glVertex3f(  0.5, -0.5, -0.5 );
-        glVertex3f(  0.5, -0.5,  0.5 );
-        glVertex3f( -0.5, -0.5,  0.5 );
-        glVertex3f( -0.5, -0.5, -0.5 );
+        glVertex3f(1, -1, -1);
+        glVertex3f(1, 1, -1);
 
-        glColor4f(   1.0,  1.0, 0.0, 0.1);
-        glVertex3f(  0.5, -0.5, -0.5 );
-        glVertex3f(  0.5,  0.5, -0.5 );
-        glVertex3f( -0.5,  0.5, -0.5 );
-        glVertex3f( -0.5, -0.5, -0.5 );
+        glVertex3f(-1, 1, -1);
+        glVertex3f(1, 1, -1);
+
+        glVertex3f(-1, -1, 1);
+        glVertex3f(-1, 1, 1);
+
+        glVertex3f(-1, -1, 1);
+        glVertex3f(1, -1, 1);
+
+        glVertex3f(1, -1, 1);
+        glVertex3f(1, 1, 1);
+
+        glVertex3f(-1, 1, 1);
+        glVertex3f(1, 1, 1);
+
+        glVertex3f(-1, -1, -1);
+        glVertex3f(-1, -1, 1);
+
+        glVertex3f(-1, 1, -1);
+        glVertex3f(-1, 1, 1);
+
+        glVertex3f(1, -1, -1);
+        glVertex3f(1, -1, 1);
+
+        glVertex3f(1, 1, -1);
+        glVertex3f(1, 1, 1);
 
         glEnd();
 
     glPopMatrix();
-
+    glEnable(GL_BLEND);
 
 
     /*

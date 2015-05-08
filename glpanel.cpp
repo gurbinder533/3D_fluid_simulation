@@ -78,6 +78,8 @@ void GLPanel::paintGL()
     glPopMatrix();
 
     cont_->renderPlanes(true);
+
+    cont_->renderFluid();
 }
 
 void GLPanel::multShadowMatrix()
@@ -160,7 +162,7 @@ void GLPanel::mousePressEvent(QMouseEvent *event)
         Vector3d pos = c_.getEye();
         Vector3d right, up, center;
         c_.getSpanningSet(right, up, center);
-        QMetaObject::invokeMethod(cont_, "leftMouseClicked", Q_ARG(double, pos[0]), Q_ARG(double, pos[1]));
+        //QMetaObject::invokeMethod(cont_, "leftMouseClicked", Q_ARG(double, pos[0]), Q_ARG(double, pos[1]));
         //MetaObject::invokeMethod(cont_, "mouseClicked", Q_ARG(double, pos[0]), Q_ARG(double, pos[1]), Q_ARG(double, pos[2]), Q_ARG(double, center[0]), Q_ARG(double, center[1]), Q_ARG(double, center[2]));
         break;
     }
@@ -180,7 +182,7 @@ void GLPanel::mouseMoveEvent(QMouseEvent *event)
     double x_d = -1.0 + 2.0*double(x)/double(width());
     double y_d = 1.0 - 2.0*double(y)/double(height());
 
-    QMetaObject::invokeMethod(cont_, "mouseDrag", Q_ARG(double, x_d), Q_ARG(double, y_d));
+    //QMetaObject::invokeMethod(cont_, "mouseDrag", Q_ARG(double, x_d), Q_ARG(double, y_d));
 }
 
 void GLPanel::mouseReleaseEvent(QMouseEvent *event)
@@ -212,6 +214,10 @@ void GLPanel::keyPressEvent(QKeyEvent *ke)
     case 'D':
         translateDir_ |= TD_RIGHT;
         break;
+    case 'Q':
+        addFluid_   |= WALL1;
+        QMetaObject::invokeMethod(cont_, "keyToAddFluid", Q_ARG(int, 1));
+        break;
     }
 }
 
@@ -242,6 +248,8 @@ void GLPanel::tick()
     c_.translateCenter(dir);
     c_.translateEye(dir);
 }
+
+/*
 void GLPanel::tick2()
 {
 
@@ -267,7 +275,7 @@ void GLPanel::tick2()
     if(dnorm != 0)
         dir /= dnorm;
 }
-
+*/
 void GLPanel::keyReleaseEvent(QKeyEvent *ke)
 {
     switch(ke->key())
@@ -283,6 +291,10 @@ void GLPanel::keyReleaseEvent(QKeyEvent *ke)
         break;
     case 'D':
         translateDir_ &= ~TD_RIGHT;
+        break;
+
+    case 'Q':
+        addFluid_   &= ~WALL1;
         break;
     }
 }

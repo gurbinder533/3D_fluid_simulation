@@ -16,7 +16,7 @@ Camera::Camera()
     p_aspect_ = 1;
 
     z_near_ = 0.1;
-    z_far_ = 200;
+    z_far_ = 20;
 
 
 //    Vector3d right, up, center;
@@ -55,8 +55,8 @@ void Camera::getZClipping(double &near, double &far) const
 
 void Camera::setDefault3D()
 {
-    viewCenter_ = Vector3d(1,0,6);
-    eye_ = Vector3d(2,0,6);
+    viewCenter_ = Vector3d(2,0,0);
+    eye_ = Vector3d(4,0,0);
 
     inner_rad_ = Vector2d(viewCenter_[0], viewCenter_[1]).norm();
     outer_rad_ = Vector2d(eye_[0], eye_[1]).norm();

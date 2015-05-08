@@ -30,6 +30,7 @@ Fluid::Fluid()
 void Fluid::render()
 {
 
+    std::cout << "FLUID RENDER\n";
     double xCell = -1;
     double yCell = 1;
     for(int i =0; i <= n; i++)
@@ -39,13 +40,14 @@ void Fluid::render()
         {
             yCell = 1 - j * this->sizeOfVoxel;
             double dens = fluidDensity.coeff(i,j);
-            glColor3f(1-dens,1-dens,1);
+            //glColor3f(1-dens,1-dens,1);
+            glColor3f(0,0,1);
             glBegin(GL_QUADS);
             {
-                glVertex2f(xCell,yCell);
-                glVertex2f(xCell + this->sizeOfVoxel, yCell);
-                glVertex2f(xCell + this->sizeOfVoxel, yCell - this->sizeOfVoxel);
-                glVertex2f(xCell, yCell - this->sizeOfVoxel);
+                glVertex3f(xCell,yCell, 6.0);
+                glVertex3f(xCell + this->sizeOfVoxel, yCell, 0.0);
+                glVertex3f(xCell + this->sizeOfVoxel, yCell - this->sizeOfVoxel, 0.0);
+                glVertex3f(xCell, yCell - this->sizeOfVoxel, 0.0);
             }
             glEnd();
         }

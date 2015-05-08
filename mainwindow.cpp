@@ -139,11 +139,7 @@ void MainWindow::setUIFromParameters(const SimParameters &params)
 
 void MainWindow::updateGL()
 {
-    if(gameRunning_)
-    {
-        ui->GLWidget->tick2();
-    }
-    else
+
     {
         ui->GLWidget->tick();
     }

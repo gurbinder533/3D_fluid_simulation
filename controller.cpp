@@ -59,6 +59,11 @@ void Controller::renderPlanes(bool transparent)
     sim_->renderPlanes(transparent);
 }
 
+
+void Controller::renderFluid()
+{
+    //sim_->render();
+}
 void Controller::renderObjects()
 {
     //sim_->renderObjects();
@@ -129,4 +134,13 @@ void Controller::leftMouseClicked(double x, double y)
         this->dragOn = true;
     }
 //    cout<<"Left Mouse Clicked :"<<this->dragOn<<endl;
+}
+
+void Controller::keyToAddFluid(int i)
+{
+    std::cout << " Q pressed  " << i << " \n";
+    //sim_->addDensity(5,5);
+
+    //sim_->addDensity(3,2);
+
 }

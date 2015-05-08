@@ -34,6 +34,7 @@ public slots:
 private:
     enum MouseAction { MA_NONE, MA_TRANSLATE, MA_ROTATE, MA_ZOOM, MA_LAUNCH};
     enum TranslateDirection { TD_FWD=1, TD_BACK=2, TD_LEFT=4, TD_RIGHT=8};
+    enum AddFluid {WALL1=1, WALL2=2};
 
     void scaleMousePos(int x, int y, double &scaledx, double &scaledy) const;
     MouseAction deduceAction(QMouseEvent *event);
@@ -43,6 +44,7 @@ private:
 
     Camera c_;
     int translateDir_;
+    int addFluid_;
     Rotator rotator_;
     //Zoomer zoomer_;
     Eigen::Vector4d lightPos_;
