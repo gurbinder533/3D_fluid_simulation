@@ -57,7 +57,7 @@ void Rotator::updateRotation(const Vector2d &pos)
         rotate(M, z, coeff*lr);
        // c_.orbitCenter(M);
         c_.orbit(M);
-        //rotate(M, z.cross(c_.getCenter() - c_.getEye()), coeff*ud);
+        rotate(M, z.cross(c_.getCenter() - c_.getEye()), coeff*ud);
         //c_.orbitCenter(M);
         //c_.orbit(M);
 

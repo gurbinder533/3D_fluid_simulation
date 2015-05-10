@@ -68,8 +68,9 @@ void Simulation::renderPlanes(bool transparent)
 {
     renderLock_.lock();
 
-    //glEnable(GL_BLEND);
-    //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     glDisable(GL_BLEND);
     glPushMatrix();
     // construct the cub
@@ -372,7 +373,7 @@ void Simulation::project(Eigen::VectorXf &x, Eigen::VectorXf &y, Eigen::VectorXf
 
                 yOld[COFF(i,j,k)] = (x[COFF(i+1,j,k)] - x[COFF(i-1,j,k)]
                                     + y[COFF(i,j+1,k)] - y[COFF(i,j-1,k)]
-                                    + z[COFF(i,j,k+1)] - z[COFF(i,j,k-1)]) * (-0.5f)/fluid_->n;
+                                    + z[COFF(i,j,k+1)] - z[COFF(i,j,k-1)]) * (-1)/(3*fluid_->n);
 
                 /*
                 yOld.coeffRef(i,j) = (x.coeff(i+1, j) - x.coeff(i-1, j)
@@ -387,29 +388,32 @@ void Simulation::project(Eigen::VectorXf &x, Eigen::VectorXf &y, Eigen::VectorXf
     }
 
     xOld.setZero();
-    zOld.setZero();
+   // zOld.setZero();
 
     setBoundry(0,yOld);
     setBoundry(0,xOld);
-    setBoundry(0,zOld);
+
+    //setBoundry(0,zOld);
 
 
-    for(int k = 0; k < 20; k++)
+    for(int loop = 0; loop < 20; loop++)
     {
         for(int i  =1; i <= fluid_->n; i++)
         {
             for(int j = 1; j <= fluid_->n; j++)
             {
-                for(int j = 1; j <= fluid_->n; j++)
+                for(int k = 1; k <= fluid_->n; k++)
                 {
                     xOld[COFF(i,j,k)] =  (xOld[COFF(i-1,j,k)] + xOld[COFF(i+1,j,k)]
                                          + xOld[COFF(i,j-1,k)] + xOld[COFF(i,j+1,k)]
-                                         + xOld[COFF(i,j,k)]) / 4 ;
+                                         + xOld[COFF(i,j,k-1)] + xOld[COFF(i,j,k+1)]
+                                         + yOld[COFF(i,j,k)]) / 6 ;
                 }
             }
         }
         setBoundry(0, xOld);
     }
+
 
     for(int i = 1; i <= fluid_->n; i++)
     {
@@ -417,9 +421,9 @@ void Simulation::project(Eigen::VectorXf &x, Eigen::VectorXf &y, Eigen::VectorXf
         {
             for(int k = 1; k <= fluid_->n; k++)
             {
-                x[COFF(i,j,k)] -= 0.5f * fluid_->n * (xOld[COFF(i+1,j,k)] - xOld[COFF(i-1,j,k)]);
-                y[COFF(i,j,k)] -= 0.5f * fluid_->n * (yOld[COFF(i+1,j,k)] - zOld[COFF(i-1,j,k)]);
-                x[COFF(i,j,k)] -= 0.5f * fluid_->n * (zOld[COFF(i+1,j,k)] - zOld[COFF(i-1,j,k)]);
+                x[COFF(i,j,k)] -= (1/3) * fluid_->n * (xOld[COFF(i+1,j,k)] - xOld[COFF(i-1,j,k)]);
+                y[COFF(i,j,k)] -= (1/3) * fluid_->n * (yOld[COFF(i,j+1,k)] - zOld[COFF(i,j-1,k)]);
+                x[COFF(i,j,k)] -= (1/3) * fluid_->n * (zOld[COFF(i,j,k+1)] - zOld[COFF(i,j,k-1)]);
             }
         }
     }
@@ -432,6 +436,7 @@ void Simulation::setBoundry(int b, VectorXf& x)
 
 
            int i, j;
+           int N = fluid_->n;
            for (i=1; i<= fluid_->n; i++)
            {
                    for (j=1; j<= fluid_->n; j++) {
@@ -468,14 +473,14 @@ void Simulation::setBoundry(int b, VectorXf& x)
 */
 }
 
-void Simulation::swap(MatrixXd &left, MatrixXd &right)
+void Simulation::swap(VectorXf &left, VectorXf &right)
 {
-    MatrixXd tmp(left);
+    VectorXf tmp(left);
     left = right;
     right = tmp;
 }
 
-void Simulation::linearSolver(int b, Eigen::MatrixXd &x, Eigen::MatrixXd &xOld, double a, double c)
+void Simulation::linearSolver(int b, Eigen::VectorXf &x, Eigen::VectorXf &xOld, double a, double c)
 {
     for(int k = 0; k < 20; k++)
     {
@@ -496,50 +501,78 @@ void Simulation::advection(int boundry, VectorXf &d, VectorXf &dOld, VectorXf &x
 {
     double dt0 = params_.timeStep * fluid_->n;
     int n = fluid_->n;
+    float v0, v1;
 
     for(int i = 1; i <= n; i++)
     {
         for(int j = 1; j <= n; j++)
         {
-            double x = i - dt0 * xOld.coeff(i,j);
-            double y = j - dt0 * yOld.coeff(i,j);
-
-            if(x > n + 0.5f)
+            for(int k = 1; k <= n; k++)
             {
-                x = n + 0.5f;
-            }
-            if(x < 0.5f)
-            {
-                x = 0.5f;
-            }
+                double x = i - dt0 * xOld[COFF(i,j,k)];
+                double y = j - dt0 * yOld[COFF(i,j,k)];
+                double z = k - dt0 * zOld[COFF(i,j,k)];
 
-            int i0 = (int) x;
-            int i1 = i0 + 1;
+                if(x > n + 0.5f)
+                {
+                    x = n + 0.5f;
+                }
+                if(x < 0.5f)
+                {
+                    x = 0.5f;
+                }
 
-            if(y > n + 0.5f)
-            {
-                y = n + 0.5f;
-            }
-            if(y < 0.5f)
-            {
-                y = 0.5f;
-            }
+                int i0 = (int) x;
+                int i1 = i0 + 1;
 
-            int j0 = (int) y;
-            int j1 = j0 +1;
+                if(y > n + 0.5f)
+                {
+                    y = n + 0.5f;
+                }
+                if(y < 0.5f)
+                {
+                    y = 0.5f;
+                }
 
-            double s1 = x - i0;
-            double s0 = 1 - s1;
-            double t1 = y - j0;
-            double t0 = 1 - t1;
+                int j0 = (int) y;
+                int j1 = j0 +1;
 
-            d.coeffRef(i,j) = s0 * (t0 * dOld.coeff(i0, j0) + t1 * dOld.coeff(i0,j1))
-                    + s1 * (t0 * dOld.coeff(i1,j0) + t1 * dOld.coeff(i1, j1));
+
+
+                if(z > n + 0.5f)
+                {
+                    z = n + 0.5f;
+                }
+                if(z < 0.5f)
+                {
+                    z = 0.5f;
+                }
+
+                int k0 = (int) z;
+                int k1 = k0 + 1;
+
+
+                double sx1 = x - i0;
+                double sx0 = 1 - sx1;
+                double sy1 = y - j0;
+                double sy0 = 1 - sy1;
+                double sz1 = z - k0;
+                double sz0 = 1 - sz1;
+
+                v0 = sx0 * (sy0 * dOld[COFF(i0, j0, k0)] + sy1 * dOld[COFF(i0,j1,k0)]) + sx1*(sy0*dOld[COFF(i1,j0,k0)] + sy1*dOld[COFF(i1,j1,k0)]);
+                v1 = sx0 * (sy0 * dOld[COFF(i0, j0, k1)] + sy1 * dOld[COFF(i0,j1,k1)]) + sx1*(sy0*dOld[COFF(i1,j0,k1)] + sy1*dOld[COFF(i1,j1,k1)]);
+
+                d[COFF(i,j,k)] = sz0*v0 + sz1*v1;
+                /*d.coeffRef(i,j) = s0 * (t0 * dOld.coeff(i0, j0) + t1 * dOld.coeff(i0,j1))
+                        + s1 * (t0 * dOld.coeff(i1,j0) + t1 * dOld.coeff(i1, j1));
+                        */
+           }
         }
     }
     setBoundry(boundry, d);
 }
 
+/*
 void Simulation::addDensity(double x, double y)
 {
     int i = floor((x+1)/fluid_->sizeOfVoxel);
@@ -600,7 +633,7 @@ void Simulation::addVelocity(double x, double y, double velX, double velY)
         }
     }
 }
-
+*/
 void Simulation::clearScene()
 {
     renderLock_.lock();

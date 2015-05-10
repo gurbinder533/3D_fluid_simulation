@@ -107,11 +107,11 @@ void Controller::mouseDrag(double x, double y)
         {
 
             case SimParameters::CM_ADDVELOCITY:
-                sim_->addVelocity(x, y, velX, velY);
+                //sim_->addVelocity(x, y, velX, velY);
 //                cout<<"Veloctiy"<<endl;
                 break;
             case SimParameters::CM_ADDDENSITY:
-                sim_->addDensity(x,y);
+                 //sim_->addDensity(x,y);
 //                cout<<"Density"<<endl;
                 break;
         }
