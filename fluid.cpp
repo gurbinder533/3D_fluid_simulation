@@ -8,20 +8,55 @@ using namespace std;
 Fluid::Fluid()
 {
 
-    this->n = 100;
+    this->n = 62;
+    this->size = (n+2)*(n+2)*(n+2);
+    this->fluidDensity3d.resize(size);
+    this->fluidDensity3dOld.resize(size);
+
+    this->vx3d.resize(size);
+    this->vx3dOld.resize(size);
+
+    this->vy3d.resize(size);
+    this->vy3dOld.resize(size);
+
+    this->vz3d.resize(size);
+    this->vz3dOld.resize(size);
+
+    /*
     this->fluidDensity.resize(this->n+1, this->n+1);
     this->fluidDensityOld.resize(this->n+1, this->n+1);
     this->vx.resize(this->n+1, this->n+1);
     this->vxOld.resize(this->n+1, this->n+1);
     this->vy.resize(this->n+1, this->n+1);
     this->vyOld.resize(this->n+1, this->n+1);
+    */
 
-    fluidDensity.setZero();
-    fluidDensityOld.setZero();
-    vx.setZero();
-    vy.setZero();
-    vxOld.setZero();
-    vyOld.setZero();
+
+    /*
+
+    std::fill(fluidDensity3d.begin(), fluidDensity3d.end(), 0);
+    std::fill(fluidDensity3d.begin(), fluidDensity3d.end(), 0);
+
+    std::fill(vx3d.begin(), vx3d.end(), 0);
+    std::fill(vx3dOld.begin(), vx3dOld.end(), 0);
+
+    std::fill(vy3d.begin(), vy3d.end(), 0);
+    std::fill(vy3dOld.begin(), vy3dOld.end(), 0);
+
+    std::fill(vz3d.begin(), vz3d.end(), 0);
+    std::fill(vz3dOld.begin(), vz3dOld.end(), 0);
+
+    */
+
+    fluidDensity3d.setZero();
+    fluidDensity3dOld.setZero();
+    vx3d.setZero();
+    vy3d.setZero();
+    vz3d.setZero();
+    vx3dOld.setZero();
+    vy3dOld.setZero();
+    vz3dOld.setZero();
+
 
     this->sizeOfVoxel = 2.0/(this->n+1);
     this->debug = true;
@@ -33,23 +68,57 @@ void Fluid::render()
     std::cout << "FLUID RENDER\n";
     double xCell = -1;
     double yCell = 1;
+    double zCell = 1;
     for(int i =0; i <= n; i++)
     {
         xCell = i * this->sizeOfVoxel - 1 ;
         for(int j = 0; j <= n; j++)
         {
             yCell = 1 - j * this->sizeOfVoxel;
-            double dens = fluidDensity.coeff(i,j);
-            //glColor3f(1-dens,1-dens,1);
-            glColor3f(0,0,1);
-            glBegin(GL_QUADS);
+            for(int k = 0; k <= n; k++)
             {
-                glVertex3f(xCell,yCell, 6.0);
-                glVertex3f(xCell + this->sizeOfVoxel, yCell, 0.0);
-                glVertex3f(xCell + this->sizeOfVoxel, yCell - this->sizeOfVoxel, 0.0);
-                glVertex3f(xCell, yCell - this->sizeOfVoxel, 0.0);
+                zCell = 1 - k * this->sizeOfVoxel;
+                double dens = fluidDensity3d[COFF(i, j, k)];
+                glColor3f(1-dens,1-dens,1-dens);
+                //glColor3f(0,0,1);
+                //std::cout << " xcell " << xCell << " , ycell " << yCell << " , zCell " << zCell << "\n";
+                //std::cout << " Voxel size : " << this->sizeOfVoxel << "\n";
+                glBegin(GL_QUADS);
+                {
+
+                    glVertex3f(xCell,yCell, zCell);
+                    glVertex3f(xCell + this->sizeOfVoxel, yCell, zCell);
+                    glVertex3f(xCell + this->sizeOfVoxel, yCell - this->sizeOfVoxel, zCell);
+                    glVertex3f(xCell, yCell - this->sizeOfVoxel, zCell);
+
+                    glVertex3f(xCell,yCell, zCell - this->sizeOfVoxel);
+                    glVertex3f(xCell + this->sizeOfVoxel, yCell, zCell - this->sizeOfVoxel);
+                    glVertex3f(xCell + this->sizeOfVoxel, yCell - this->sizeOfVoxel, zCell - this->sizeOfVoxel);
+                    glVertex3f(xCell, yCell - this->sizeOfVoxel, zCell - this->sizeOfVoxel);
+
+                    glVertex3f(xCell,yCell, zCell);
+                    glVertex3f(xCell + this->sizeOfVoxel, yCell, zCell);
+                    glVertex3f(xCell + this->sizeOfVoxel, yCell , zCell - this->sizeOfVoxel);
+                    glVertex3f(xCell, yCell, zCell - this->sizeOfVoxel);
+
+                    glVertex3f(xCell,yCell - this->sizeOfVoxel, zCell);
+                    glVertex3f(xCell + this->sizeOfVoxel, yCell- this->sizeOfVoxel, zCell);
+                    glVertex3f(xCell + this->sizeOfVoxel, yCell - this->sizeOfVoxel, zCell - this->sizeOfVoxel);
+                    glVertex3f(xCell, yCell - this->sizeOfVoxel, zCell - this->sizeOfVoxel);
+
+                    glVertex3f(xCell,yCell , zCell);
+                    glVertex3f(xCell , yCell- this->sizeOfVoxel, zCell);
+                    glVertex3f(xCell , yCell - this->sizeOfVoxel, zCell - this->sizeOfVoxel);
+                    glVertex3f(xCell, yCell, zCell - this->sizeOfVoxel);
+
+
+                    glVertex3f(xCell +this->sizeOfVoxel,yCell , zCell);
+                    glVertex3f(xCell  +this->sizeOfVoxel , yCell- this->sizeOfVoxel, zCell);
+                    glVertex3f(xCell +this->sizeOfVoxel , yCell - this->sizeOfVoxel, zCell - this->sizeOfVoxel);
+                    glVertex3f(xCell +this->sizeOfVoxel, yCell, zCell - this->sizeOfVoxel);
+                }
+                glEnd();
             }
-            glEnd();
         }
     }
 }
@@ -61,7 +130,10 @@ double Fluid::getTotalDensity()
     {
         for(int j = 0; j < n; j++)
         {
-            densTotal += fluidDensity.coeff(i,j);
+            for(int k = 0; k < n; k++)
+            {
+               densTotal += fluidDensity3d[COFF(i,j,k)];
+            }
         }
     }
     return densTotal;
@@ -69,10 +141,29 @@ double Fluid::getTotalDensity()
 
 void Fluid::zeroEverything()
 {
-    fluidDensity.setZero();
-    fluidDensityOld.setZero();
-    vx.setZero();
-    vy.setZero();
-    vxOld.setZero();
-    vyOld.setZero();
+
+/*
+    std::fill(fluidDensity3d.begin(), fluidDensity3d.end(), 0);
+    std::fill(fluidDensity3d.begin(), fluidDensity3d.end(), 0);
+
+    std::fill(vx3d.begin(), vx3d.end(), 0);
+    std::fill(vx3dOld.begin(), vx3dOld.end(), 0);
+
+    std::fill(vy3d.begin(), vy3d.end(), 0);
+    std::fill(vy3dOld.begin(), vy3dOld.end(), 0);
+
+    std::fill(vz3d.begin(), vz3d.end(), 0);
+    std::fill(vz3dOld.begin(), vz3dOld.end(), 0);
+*/
+
+    fluidDensity3d.setZero();
+    fluidDensity3dOld.setZero();
+    vx3d.setZero();
+    vy3d.setZero();
+    vz3d.setZero();
+    vx3dOld.setZero();
+    vy3dOld.setZero();
+    vz3dOld.setZero();
+
+
 }

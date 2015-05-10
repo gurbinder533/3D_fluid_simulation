@@ -62,7 +62,7 @@ void Controller::renderPlanes(bool transparent)
 
 void Controller::renderFluid()
 {
-    //sim_->render();
+    sim_->render();
 }
 void Controller::renderObjects()
 {

@@ -271,85 +271,128 @@ void Simulation::takeSimulationStep()
 
 void Simulation::fluidSimulationStep()
 {
-    addSource(fluid_->vx, fluid_->vxOld);
-    addSource(fluid_->vy, fluid_->vyOld);
+    addSource(fluid_->vx3d, fluid_->vx3dOld);
+    addSource(fluid_->vy3d, fluid_->vy3dOld);
+    addSource(fluid_->vz3d, fluid_->vz3dOld);
     // Velocity Code
 
-    this->swap(fluid_->vx, fluid_->vxOld);
-    this->swap(fluid_->vy, fluid_->vyOld);
+    this->swap(fluid_->vx3d, fluid_->vx3dOld);
+    this->swap(fluid_->vy3d, fluid_->vy3dOld);
+    this->swap(fluid_->vy3d, fluid_->vz3dOld);
+
 //    cout<<"Velocity X : \n"<<fluid_->vx<<endl;
 //    cout<<"Velocity Y : \n"<<fluid_->vy<<endl;
 
-    advection(1, fluid_->vx, fluid_->vxOld, fluid_->vxOld, fluid_->vyOld );
-    advection(2, fluid_->vy, fluid_->vyOld, fluid_->vxOld, fluid_->vyOld );
+    //TODO: we need to CHANGE THIS
+    advection(1, fluid_->vx3d, fluid_->vx3dOld, fluid_->vx3dOld, fluid_->vy3dOld, fluid_->vz3dOld);
+    advection(2, fluid_->vy3d, fluid_->vy3dOld, fluid_->vx3dOld, fluid_->vy3dOld, fluid_->vz3dOld);
+    advection(2, fluid_->vz3d, fluid_->vz3dOld, fluid_->vx3dOld, fluid_->vy3dOld, fluid_->vz3dOld);
 
-    project(fluid_->vx, fluid_->vy, fluid_->vxOld, fluid_->vyOld);
+    project(fluid_->vx3d, fluid_->vy3d, fluid_->vz3d, fluid_->vx3dOld, fluid_->vy3dOld, fluid_->vz3dOld);
 
-    this->swap(fluid_->vx, fluid_->vxOld);
-    this->swap(fluid_->vy, fluid_->vyOld);
+    this->swap(fluid_->vx3d, fluid_->vx3dOld);
+    this->swap(fluid_->vy3d, fluid_->vy3dOld);
+    this->swap(fluid_->vz3d, fluid_->vz3dOld);
 
-    diffuse(1, fluid_->vx, fluid_->vxOld, params_.viscosityFluid);
-    diffuse(2, fluid_->vy, fluid_->vyOld, params_.viscosityFluid);
+    diffuse(1, fluid_->vx3d, fluid_->vx3dOld, params_.viscosityFluid);
+    diffuse(2, fluid_->vy3d, fluid_->vy3dOld, params_.viscosityFluid);
+    diffuse(2, fluid_->vz3d, fluid_->vz3dOld, params_.viscosityFluid);
 
-    project(fluid_->vx, fluid_->vy, fluid_->vxOld, fluid_->vyOld);
+    project(fluid_->vx3d, fluid_->vy3d, fluid_->vz3d, fluid_->vx3dOld, fluid_->vy3dOld, fluid_->vz3dOld);
 
     //Density Code
-    addSource(fluid_->fluidDensity, fluid_->fluidDensityOld);
-    this->swap(fluid_->fluidDensity, fluid_->fluidDensityOld);
+    addSource(fluid_->fluidDensity3d, fluid_->fluidDensity3dOld);
+    this->swap(fluid_->fluidDensity3d, fluid_->fluidDensity3dOld);
 
 
-    diffuse(0, fluid_->fluidDensity, fluid_->fluidDensityOld, params_.diffusionConstant);
-    this->swap(fluid_->fluidDensity, fluid_->fluidDensityOld);
+    diffuse(0, fluid_->fluidDensity3d, fluid_->fluidDensity3dOld, params_.diffusionConstant);
+    this->swap(fluid_->fluidDensity3d, fluid_->fluidDensity3dOld);
 
-    advection(0, fluid_->fluidDensity, fluid_->fluidDensityOld, fluid_->vx, fluid_->vy);
-    fluid_->fluidDensityOld.setZero();
-    fluid_->vxOld.setZero();
-    fluid_->vyOld.setZero();
+    advection(0, fluid_->fluidDensity3d, fluid_->fluidDensity3dOld, fluid_->vx3d, fluid_->vy3d, fluid_->vz3d);
 
-    cout << "fluid density: " << fluid_->getTotalDensity() << endl;
+ /*
+    std::fill(fluid_->fluidDensity3dOld.begin(), fluid_->fluidDensity3dOld.end(), 0);
+    std::fill(fluid_->vx3dOld.begin(), fluid_->vx3dOld.end(), 0);
+    std::fill(fluid_->vy3dOld.begin(), fluid_->vy3dOld.end(), 0);
+    std::fill(fluid_->vz3dOld.begin(), fluid_->vz3dOld.end(), 0);
+ */
+
+
+
+    fluid_->fluidDensity3dOld.setZero();
+    fluid_->vx3dOld.setZero();
+    fluid_->vy3dOld.setZero();
+    fluid_->vz3dOld.setZero();
+
+
+    //cout << "fluid density: " << fluid_->getTotalDensity() << endl;
 }
 
-void Simulation::addSource(MatrixXd &d, MatrixXd &dOld)
+void Simulation::addSource(Eigen::VectorXf &d, Eigen::VectorXf &dOld)
 {
 
     d += params_.timeStep * dOld;
 
 }
 
-void Simulation::diffuse(int boundary, MatrixXd &d, MatrixXd &dOld, double diffFactor)
+void Simulation::diffuse(int boundary, VectorXf &d, VectorXf &dOld, double diffFactor)
 {
-    double a = params_.timeStep * diffFactor * fluid_->n * fluid_->n;
+    double a = params_.timeStep * diffFactor * fluid_->n * fluid_->n * fluid_->n;
 
-    for(int k = 0; k < 20; k++)
+    for(int loop = 0; loop < 20; loop++)
     {
         for(int i  =1; i <= fluid_->n; i++)
         {
             for(int j = 1; j <= fluid_->n; j++)
             {
-                d.coeffRef(i,j) = (dOld.coeff(i,j) + a * (d.coeff(i-1,j) + d.coeff(i+1,j) +
+                for(int k = 1; k <= fluid_->n; k++)
+                {
+
+                    d[COFF(i,j,k)] = (dOld[COFF(i,j,k)] + a * (d[COFF(i-1,j,k)] + d[COFF(i+1,j,k)] +
+                                         d[COFF(i,j-1,k)] + d[COFF(i,j+1,k)] + d[COFF(i,j,k-1)] + d[COFF(i,j,k+1)]))/(1+6*a);
+                    /*
+                    d.coeffRef(i,j) = (dOld.coeff(i,j) + a * (d.coeff(i-1,j) + d.coeff(i+1,j) +
                                                           d.coeff(i,j-1) + d.coeff(i,j+1)))/(1+4*a);
+                     */
+                }
             }
         }
         setBoundry(boundary, d);
     }
 }
 
-void Simulation::project(Eigen::MatrixXd &x, Eigen::MatrixXd &y, Eigen::MatrixXd &xOld, Eigen::MatrixXd &yOld)
+void Simulation::project(Eigen::VectorXf &x, Eigen::VectorXf &y, Eigen::VectorXf &z, Eigen::VectorXf &xOld, Eigen::VectorXf &yOld, Eigen::VectorXf &zOld)
 {
     for(int i = 1; i <= fluid_->n; i++)
     {
         for(int j = 1; j <= fluid_->n; j++)
         {
-            yOld.coeffRef(i,j) = (x.coeff(i+1, j) - x.coeff(i-1, j)
+            for(int k = 1; k <= fluid_->n; k++)
+            {
+
+                yOld[COFF(i,j,k)] = (x[COFF(i+1,j,k)] - x[COFF(i-1,j,k)]
+                                    + y[COFF(i,j+1,k)] - y[COFF(i,j-1,k)]
+                                    + z[COFF(i,j,k+1)] - z[COFF(i,j,k-1)]) * (-0.5f)/fluid_->n;
+
+                /*
+                yOld.coeffRef(i,j) = (x.coeff(i+1, j) - x.coeff(i-1, j)
                                     + y.coeff(i,j+1) - y.coeff(i,j-1)) * -0.5f / fluid_->n;
+
+               */
+
+
+            }
 
         }
     }
 
     xOld.setZero();
+    zOld.setZero();
 
     setBoundry(0,yOld);
     setBoundry(0,xOld);
+    setBoundry(0,zOld);
+
 
     for(int k = 0; k < 20; k++)
     {
@@ -357,9 +400,12 @@ void Simulation::project(Eigen::MatrixXd &x, Eigen::MatrixXd &y, Eigen::MatrixXd
         {
             for(int j = 1; j <= fluid_->n; j++)
             {
-                xOld.coeffRef(i,j) =  ( xOld.coeff(i-1, j) + xOld.coeff(i+1, j)
-                                         + xOld.coeff(i,j-1) + xOld.coeff(i,j+1)
-                                         + yOld.coeff(i,j)) / 4 ;
+                for(int j = 1; j <= fluid_->n; j++)
+                {
+                    xOld[COFF(i,j,k)] =  (xOld[COFF(i-1,j,k)] + xOld[COFF(i+1,j,k)]
+                                         + xOld[COFF(i,j-1,k)] + xOld[COFF(i,j+1,k)]
+                                         + xOld[COFF(i,j,k)]) / 4 ;
+                }
             }
         }
         setBoundry(0, xOld);
@@ -369,16 +415,45 @@ void Simulation::project(Eigen::MatrixXd &x, Eigen::MatrixXd &y, Eigen::MatrixXd
     {
         for(int j = 1; j <= fluid_->n; j++)
         {
-            x.coeffRef(i,j) -= 0.5f * fluid_->n * (xOld.coeff(i+1, j) - xOld.coeff(i-1, j));
-            y.coeffRef(i,j) -= 0.5f * fluid_->n * (xOld.coeff(i, j+1) - xOld.coeff(i, j-1));
+            for(int k = 1; k <= fluid_->n; k++)
+            {
+                x[COFF(i,j,k)] -= 0.5f * fluid_->n * (xOld[COFF(i+1,j,k)] - xOld[COFF(i-1,j,k)]);
+                y[COFF(i,j,k)] -= 0.5f * fluid_->n * (yOld[COFF(i+1,j,k)] - zOld[COFF(i-1,j,k)]);
+                x[COFF(i,j,k)] -= 0.5f * fluid_->n * (zOld[COFF(i+1,j,k)] - zOld[COFF(i-1,j,k)]);
+            }
         }
     }
     setBoundry(1,x);
     setBoundry(2,y);
 }
 
-void Simulation::setBoundry(int b, MatrixXd& m)
+void Simulation::setBoundry(int b, VectorXf& x)
 {
+
+
+           int i, j;
+           for (i=1; i<= fluid_->n; i++)
+           {
+                   for (j=1; j<= fluid_->n; j++) {
+                           x[COFF(0,i,j)]    = (b==1) ? -x[COFF(1,i,j)] : x[COFF(1,i,j)];
+                           x[COFF(N+1,i,j)]  = (b==1) ? -x[COFF(N,i,j)] : x[COFF(N,i,j)];
+                           x[COFF(i,0,j)]    = (b==2) ? -x[COFF(i,1,j)] : x[COFF(i,1,j)];
+                           x[COFF(i,N+1,j)]  = (b==2) ? -x[COFF(i,N,j)] : x[COFF(i,N,j)];
+                           x[COFF(i,j,0)]    = (b==3) ? -x[COFF(i,j,1)] : x[COFF(i,j,1)];
+                           x[COFF(i,j,N+1)]  = (b==3) ? -x[COFF(i,j,N)] : x[COFF(i,j,N)];
+                   }
+           }
+
+           x[COFF(0,0,0)]       = (x[COFF(1,0,0)]    +x[COFF(0,1,0)]    +x[COFF(0,0,1)])    /3;
+           x[COFF(0,N+1,0)]     = (x[COFF(1,N+1,0)]  +x[COFF(0,N,0)]    +x[COFF(0,N+1,1)])  /3;
+           x[COFF(N+1,0,0)]     = (x[COFF(N,0,0)]    +x[COFF(N+1,1,0)]  +x[COFF(N+1,0,1)])  /3;
+           x[COFF(N+1,N+1,0)]   = (x[COFF(N,N+1,0)]  +x[COFF(N+1,N,0)]  +x[COFF(N+1,N+1,1)])/3;
+           x[COFF(0,0,N+1)]     = (x[COFF(1,0,N+1)]  +x[COFF(0,1,N+1)]  +x[COFF(0,0,N)])    /3;
+           x[COFF(0,N+1,N+1)]   = (x[COFF(1,N+1,N+1)]+x[COFF(0,N,N+1)]  +x[COFF(0,N+1,N)])  /3;
+           x[COFF(N+1,0,N+1)]   = (x[COFF(N,0,N+1)]  +x[COFF(N+1,1,N+1)]+x[COFF(N+1,0,N)])  /3;
+           x[COFF(N+1,N+1,N+1)] = (x[COFF(N,N+1,N+1)]+x[COFF(N+1,N,N+1)]+x[COFF(N+1,N+1,N)])/3;
+
+ /*
     for(int i = 1; i <= fluid_->n; i++)
     {
         m.coeffRef(0,i) =               (b==1) ? -m.coeff(1,i) : m.coeff(1,i);
@@ -390,7 +465,7 @@ void Simulation::setBoundry(int b, MatrixXd& m)
     m.coeffRef(0,fluid_->n) =           0.5f *(m.coeff(1,fluid_->n) + m.coeff(0, fluid_->n-1));
     m.coeffRef(fluid_->n,0) =           0.5f *(m.coeff(fluid_->n-1,0) + m.coeff(fluid_->n,1));
     m.coeffRef(fluid_->n,fluid_->n) =   0.5f *(m.coeff(fluid_->n-1,fluid_->n) + m.coeff(fluid_->n,fluid_->n-1));
-
+*/
 }
 
 void Simulation::swap(MatrixXd &left, MatrixXd &right)
@@ -417,7 +492,7 @@ void Simulation::linearSolver(int b, Eigen::MatrixXd &x, Eigen::MatrixXd &xOld, 
     }
 }
 
-void Simulation::advection(int boundry, MatrixXd &d, MatrixXd &dOld, MatrixXd &xOld, MatrixXd &yOld)
+void Simulation::advection(int boundry, VectorXf &d, VectorXf &dOld, VectorXf &xOld, VectorXf &yOld, VectorXf &zOld)
 {
     double dt0 = params_.timeStep * fluid_->n;
     int n = fluid_->n;

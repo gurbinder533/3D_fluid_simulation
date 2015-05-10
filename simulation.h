@@ -33,15 +33,15 @@ public:
 ///////////////////////////////////////////////
    void render();
    void fluidSimulationStep();
-   void advection(int boundary, Eigen::MatrixXd &d, Eigen::MatrixXd &dOld, Eigen::MatrixXd &uOld, Eigen::MatrixXd &vOld);
-   void diffuse(int boundary, Eigen::MatrixXd &d, Eigen::MatrixXd &dOld, double diffFactor);
-   void linearSolver(int b, Eigen::MatrixXd &x, Eigen::MatrixXd &xOld, double a, double c);
-   void project(Eigen::MatrixXd &x, Eigen::MatrixXd &y, Eigen::MatrixXd &xOld, Eigen::MatrixXd &yOld);
-   void swap(Eigen::MatrixXd &left, Eigen::MatrixXd &right);
-   void addSource(Eigen::MatrixXd &d, Eigen::MatrixXd& dOld);
+   void advection(int boundary, Eigen::VectorXf &d, Eigen::VectorXf &dOld, Eigen::VectorXf &uOld, Eigen::VectorXf &vOld);
+   void diffuse(int boundary, Eigen::VectorXf &d, Eigen::VectorXf &dOld, double diffFactor);
+   void linearSolver(int b, Eigen::VectorXf &x, Eigen::VectorXf &xOld, double a, double c);
+   void project(Eigen::VectorXf &x, Eigen::VectorXf &y, Eigen::VectorXf &xOld, Eigen::VectorXf &yOld);
+   void swap(Eigen::VectorXf &left, Eigen::VectorXf &right);
+   void addSource(Eigen::VectorXf &d, Eigen::VectorXf& dOld);
    void addVelocity(double x, double y, double velX, double velY);
    void addDensity(double x, double y);
-   void setBoundry(int b, Eigen::MatrixXd& m);
+   void setBoundry(int b, Eigen::VectorXf& m);
 ///////////////////////////////////////////////
 
 
