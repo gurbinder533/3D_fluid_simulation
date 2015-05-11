@@ -29,6 +29,7 @@ public:
     int size;
     double sizeOfVoxel;
     bool debug;
+    int type;
 
     void zeroEverything();
     double getTotalDensity();

@@ -330,10 +330,7 @@ void Simulation::diffuse(int boundary, VectorXf &d, VectorXf &dOld, double diffF
 
                     d[COFF(i,j,k)] = (dOld[COFF(i,j,k)] + a * (d[COFF(i-1,j,k)] + d[COFF(i+1,j,k)] +
                                          d[COFF(i,j-1,k)] + d[COFF(i,j+1,k)] + d[COFF(i,j,k-1)] + d[COFF(i,j,k+1)]))/(1+6*a);
-                    /*
-                    d.coeffRef(i,j) = (dOld.coeff(i,j) + a * (d.coeff(i-1,j) + d.coeff(i+1,j) +
-                                                          d.coeff(i,j-1) + d.coeff(i,j+1)))/(1+4*a);
-                     */
+
                 }
             }
         }
@@ -531,54 +528,55 @@ void Simulation::addDensity(int sourceNo)
 {
     if (sourceNo == 1)
     {
-        int i = 3;
-        int j = 3;
-        int k = 3;
+        fluid_->type = 0;
+        int i = 1;
+        int j = 1;
+        int k = 1;
         cout << "HERE1 : " << COFF(i,j,k) << endl;
-        fluid_->fluidDensity3dOld[COFF(i,j,k)] += 500;
+        fluid_->fluidDensity3dOld[COFF(i,j,k)] += params_.densityMagnitude;
 
-//        for(int r = 1; r <= params_.densityRadius; r++)
-//        {
-//            if(i-r >= 0 && i+r <fluid_->n && j-r >= 0 && j+r < fluid_->n)
-//            {
-//                fluid_->fluidDensityOld.coeffRef(i-r,j-r) += params_.densityMagnitude;
-//                fluid_->fluidDensityOld.coeffRef(i-r,j) += params_.densityMagnitude;
-//                fluid_->fluidDensityOld.coeffRef(i-r,j+r) += params_.densityMagnitude;
-//                fluid_->fluidDensityOld.coeffRef(i,j+r) += params_.densityMagnitude;
-//                fluid_->fluidDensityOld.coeffRef(i+r,j+r) += params_.densityMagnitude;
-//                fluid_->fluidDensityOld.coeffRef(i+r,j) += params_.densityMagnitude;
-//                fluid_->fluidDensityOld.coeffRef(i+r,j-r) += params_.densityMagnitude;
-//                fluid_->fluidDensityOld.coeffRef(i,j-r) += params_.densityMagnitude;
-//            }
-//        }
     }
-    else if (sourceNo == 2)
+    if (sourceNo == 2)
     {
+        fluid_->type = 1;
         int i = fluid_->n -1;
-        int j = fluid_->n -1;
+        int j = (fluid_->n - 1)/2;
         int k = fluid_->n -1;
         cout << "HERE2 : " << COFF(i,j,k) << endl;
-        fluid_->fluidDensity3dOld[COFF(i,j,k)] += 400;
+        fluid_->fluidDensity3dOld[COFF(i,j,k)] += params_.densityMagnitude;
 
-//        for(int r = 1; r <= params_.densityRadius; r++)
-//        {
-//            if(i-r >= 0 && i+r <fluid_->n && j-r >= 0 && j+r < fluid_->n)
-//            {
-//                fluid_->fluidDensityOld.coeffRef(i-r,j-r) += params_.densityMagnitude;
-//                fluid_->fluidDensityOld.coeffRef(i-r,j) += params_.densityMagnitude;
-//                fluid_->fluidDensityOld.coeffRef(i-r,j+r) += params_.densityMagnitude;
-//                fluid_->fluidDensityOld.coeffRef(i,j+r) += params_.densityMagnitude;
-//                fluid_->fluidDensityOld.coeffRef(i+r,j+r) += params_.densityMagnitude;
-//                fluid_->fluidDensityOld.coeffRef(i+r,j) += params_.densityMagnitude;
-//                fluid_->fluidDensityOld.coeffRef(i+r,j-r) += params_.densityMagnitude;
-//                fluid_->fluidDensityOld.coeffRef(i,j-r) += params_.densityMagnitude;
-//            }
-//        }
+    }
+    if (sourceNo == 3)
+    {
+        fluid_->type = 1;
+        int i = (fluid_->n-1)/2;
+        int j = (fluid_->n-1)/2;
+        int k = (fluid_->n-1)/2;
+        cout << "HERE2 : " << COFF(i,j,k) << endl;
+        fluid_->fluidDensity3dOld[COFF(i,j,k)] += params_.densityMagnitude;
+
     }
 }
 
-//void Simulation::addVelocity(double x, double y, double velX, double velY)
-//{
+void Simulation::addVelocity(int sourceNo, double velX, double velY, double velZ)
+{
+    if(sourceNo == 1)
+    {
+        int i = fluid_->n -1;
+        int j = (fluid_->n - 1)/2;
+        int k = fluid_->n -1;
+
+        std::cout << "prev: velx" << fluid_->vx3dOld[COFF(i,j,k)] << std::endl;
+        //fluid_->vx3dOld[COFF(i,j,k)] += velX;
+        //fluid_->vy3dOld[COFF(i,j,k)] += velY;
+        fluid_->vz3dOld[COFF(i,j,k)] += (velZ + 1000);
+         std::cout << ": velx" << fluid_->vx3dOld[COFF(i,j,k)] << std::endl;
+
+    }
+
+
+}
+
 //    int i = floor((x+1)/fluid_->sizeOfVoxel);
 //    int j = -1* floor((y-1)/fluid_->sizeOfVoxel);
 //    if(i >= 0 && i <fluid_->n && j >= 0 && j < fluid_->n)

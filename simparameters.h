@@ -24,6 +24,11 @@ struct SimParameters
 
     float buoyancy;
 
+    bool source1;
+    bool source2;
+    bool source3;
+
+
 };
 
 #endif // SIMPARAMETERS_H

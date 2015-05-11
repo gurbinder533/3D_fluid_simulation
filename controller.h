@@ -28,6 +28,7 @@ public slots:
     void mouseClicked(double x, double y, double z, double dx, double dy, double dz);
     void leftMouseClicked(double x, double y);
     void keyToAddFluid(int);
+    void keyToAddVel(int, double, double, double);
     void resetDrag();
     void mouseDrag(double x, double y);
     void simTick();

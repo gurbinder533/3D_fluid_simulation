@@ -107,16 +107,11 @@ void Controller::mouseDrag(double x, double y)
         {
 
             case SimParameters::CM_ADDVELOCITY:
-                //sim_->addVelocity(x, y, velX, velY);
-//                cout<<"Veloctiy"<<endl;
                 break;
             case SimParameters::CM_ADDDENSITY:
-                 //sim_->addDensity(x,y);
-//                cout<<"Density"<<endl;
                 break;
         }
     }
-//    cout<<"Mouse Moved :"<<this->dragOn<<endl;
 }
 
 void Controller::resetDrag()
@@ -136,11 +131,22 @@ void Controller::leftMouseClicked(double x, double y)
 //    cout<<"Left Mouse Clicked :"<<this->dragOn<<endl;
 }
 
+
+void Controller::keyToAddVel(int i, double velX, double velY, double velZ)
+{
+    std::cout << "V pressed" << std::endl;
+    sim_->addVelocity(i, velX, velY, velZ);
+}
+
 void Controller::keyToAddFluid(int i)
 {
     std::cout << " Q pressed  " << i << " \n";
     std::cout << std::endl;
-    //sim_->addDensity(1);
-    sim_->addDensity(2);
+    if(params_.source2)
+        sim_->addDensity(1);
+    if(params_.source1)
+        sim_->addDensity(2);
+    if(params_.source3)
+        sim_->addDensity(3);
 
 }

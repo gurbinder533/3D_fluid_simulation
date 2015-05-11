@@ -11,7 +11,6 @@ MainWindow::MainWindow(Controller &cont, int fps, QWidget *parent) :
     ui->setupUi(this);
     ui->GLWidget->setController(&cont);
     simRunning_ = false;
-    gameRunning_ = false;
     connect(&renderTimer_, SIGNAL(timeout()), this, SLOT(updateGL()));
     renderTimer_.start(1000/fps);
 }
@@ -20,20 +19,30 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
-
+/*
 void MainWindow::on_actionExit_triggered()
 {
     close();
 }
-
+*/
 void MainWindow::setParametersFromUI()
 {
+
     SimParameters params;
 
-    /*
     params.simRunning = simRunning_;
-    params.gameRunning = gameRunning_;
+    params.timeStep = ui->timeStepEdit->text().toDouble();
 
+    params.source1 = ui->source1->isChecked();
+    params.source2 = ui->source2->isChecked();
+    params.source3 = ui->source3->isChecked();
+
+    params.diffusionConstant = ui->diffusionK->text().toDouble();
+    params.viscosityFluid = ui->viscosityK->text().toDouble();
+    params.densityMagnitude = ui->densityMag->text().toDouble();
+    params.velocityMagnitude = ui->velocityMag->text().toDouble();
+
+/*
     params.timeStep = ui->timeStepEdit->text().toDouble();
     params.NewtonTolerance = ui->newtonTolEdit->text().toDouble();
     params.NewtonMaxIters = ui->newtonMaxItersEdit->text().toInt();
@@ -77,27 +86,21 @@ void MainWindow::setParametersFromUI()
 void MainWindow::setUIFromParameters(const SimParameters &params)
 {
 
-    /*
     if(params.simRunning)
     {
-        ui->startSimulationButton->setText(QString("Pause Simulation"));
+        ui->Simulate->setText(QString("Pause Simulation"));
         simRunning_ = true;
     }
     else
     {
-        ui->startSimulationButton->setText(QString("Start Simulation"));
+        ui->Simulate->setText(QString("Start Simulation"));
         simRunning_ = false;
-    }
-    if(params.gameRunning)
-    {
-        ui->startGameModeButton->setText(QString("Stop Game"));
-    }
-    else
-    {
-        ui->startGameModeButton->setText(QString("Start Game Mode"));
     }
 
     ui->timeStepEdit->setText(QString::number(params.timeStep));
+    /*
+
+
     ui->newtonTolEdit->setText(QString::number(params.NewtonTolerance));
     ui->newtonMaxItersEdit->setText(QString::number(params.NewtonMaxIters));
     ui->penaltyStiffnessEdit->setText(QString::number(params.penaltyStiffness));
@@ -146,6 +149,7 @@ void MainWindow::updateGL()
     ui->GLWidget->update();
 }
 
+/*
 void MainWindow::on_actionReset_Everything_triggered()
 {
     QMetaObject::invokeMethod(&cont_, "reset");
@@ -268,6 +272,62 @@ void MainWindow::on_densityEdit_editingFinished()
 }
 
 void MainWindow::on_penaltyStiffnessEdit_editingFinished()
+{
+    setParametersFromUI();
+}
+
+void MainWindow::on_tempSlider_sliderReleased()
+{
+    setParametersFromUI();
+}
+*/
+
+
+void MainWindow::on_Simulate_clicked()
+{
+    simRunning_ = !simRunning_;
+    setParametersFromUI();
+}
+
+void MainWindow::on_timeStepEdit_editingFinished()
+{
+    setParametersFromUI();
+}
+
+void MainWindow::on_clearScene_clicked()
+{
+    simRunning_ = false;
+    setParametersFromUI();
+    QMetaObject::invokeMethod(&cont_, "clearScene");
+}
+
+void MainWindow::on_source1_clicked()
+{
+    setParametersFromUI();
+}
+
+void MainWindow::on_source2_clicked()
+{
+    setParametersFromUI();
+}
+
+void MainWindow::on_source3_clicked()
+{
+    setParametersFromUI();
+}
+
+void MainWindow::on_diffusionK_editingFinished()
+{
+   setParametersFromUI();
+}
+
+
+void MainWindow::on_viscosityK_editingFinished()
+{
+    setParametersFromUI();
+}
+
+void MainWindow::on_densityMag_editingFinished()
 {
     setParametersFromUI();
 }

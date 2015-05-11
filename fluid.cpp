@@ -8,6 +8,7 @@ using namespace std;
 Fluid::Fluid()
 {
 
+    this->type = 1; // blue
     this->n = 30;
     this->size = (n+2)*(n+2)*(n+2);
     this->fluidDensity3d.resize(size);
@@ -76,17 +77,24 @@ void Fluid::render()
                 float dens = fluidDensity3d[COFF(i, j, k)];
 //                cout << dens << endl;
 
+
+
                 if (dens > 0)
                 {
                     //glColor4f(255.0-dens, 255.0-dens, 255.0, 0.2);
-                    glColor4f(1.0-dens, 1.0-dens, 255.0, dens*20*n);
-//                    glColor4f(0, 0, 255.0, 1);
+                    if(type == 0) // blue
+                    {
+                        glColor4f(1.0-dens, 1.0-dens, 255.0, dens*20*n);
+//                      glColor4f(0, 0, 255.0, 1);
+                    }
+                    else if(type == 1)
+                    {
+                       glColor4f(255.0, 1.0-dens, 1.0 - dens, dens*20*n);
+                    }
                 }
                 else
                 {
                     glColor4f(255.0, 255.0, 255.0, 0.0);
-//                    glColor3f(1-dens, 1-dens, 1);
-//                    glColor4f(0, 0, 255.0, 0);
                 }
 
                 //glColor3f(1,0,0);

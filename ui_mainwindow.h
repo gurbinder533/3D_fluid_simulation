@@ -16,18 +16,13 @@
 #include <QtGui/QCheckBox>
 #include <QtGui/QFrame>
 #include <QtGui/QGroupBox>
-#include <QtGui/QHBoxLayout>
 #include <QtGui/QHeaderView>
 #include <QtGui/QLabel>
 #include <QtGui/QLineEdit>
 #include <QtGui/QMainWindow>
-#include <QtGui/QMenu>
-#include <QtGui/QMenuBar>
 #include <QtGui/QPushButton>
-#include <QtGui/QRadioButton>
 #include <QtGui/QStatusBar>
 #include <QtGui/QToolBar>
-#include <QtGui/QVBoxLayout>
 #include <QtGui/QWidget>
 #include "glpanel.h"
 
@@ -42,54 +37,23 @@ public:
     QWidget *centralWidget;
     GLPanel *GLWidget;
     QFrame *parameterFrame;
-    QWidget *verticalLayoutWidget;
-    QVBoxLayout *verticalLayout;
-    QGroupBox *simOptionsBox;
-    QWidget *horizontalLayoutWidget;
-    QHBoxLayout *horizontalLayout;
-    QGroupBox *SimulationBox;
-    QPushButton *startSimulationButton;
-    QPushButton *startGameModeButton;
-    QGroupBox *SimParametersBox;
-    QLabel *timeStepLabel;
-    QLabel *newtonTolLabel;
-    QLabel *newtonMaxItersLabel;
+    QGroupBox *SimulationOptions;
+    QPushButton *Simulate;
+    QLabel *timeStep;
     QLineEdit *timeStepEdit;
-    QLineEdit *newtonTolEdit;
-    QLineEdit *newtonMaxItersEdit;
-    QLabel *penaltyStiffnessLabel;
-    QLineEdit *penaltyStiffnessEdit;
-    QGroupBox *activeForcesBox;
-    QCheckBox *gravityCheckBox;
-    QLabel *gravityGLabel;
-    QLineEdit *gravityGEdit;
+    QPushButton *clearScene;
     QLabel *label;
-    QCheckBox *frictionCheckBox;
-    QLabel *CoeffRestitutionLabel;
-    QLabel *CoeffFrictionLabel;
-    QLineEdit *coeffRestitutionEdit;
-    QLineEdit *coeffFrictionEdit;
-    QGroupBox *uiOptionsBox;
-    QWidget *layoutWidget;
-    QVBoxLayout *verticalLayout_2;
-    QGroupBox *rigidBodyTypeBox;
-    QRadioButton *sphereButton;
-    QRadioButton *twoByFourButton;
-    QRadioButton *bunnyButton;
-    QRadioButton *customButton;
-    QRadioButton *planeButton;
-    QGroupBox *launchOptionsBox;
-    QLabel *launchVelLabel;
-    QLineEdit *launchVelEdit;
-    QCheckBox *randomOrienatationCheckBox;
-    QCheckBox *randomAngularVelCheckBox;
-    QLabel *densityLabel;
-    QLineEdit *densityEdit;
-    QLabel *randomVelMagLabel;
-    QLineEdit *randomVelMagEdit;
-    QMenuBar *menuBar;
-    QMenu *menuFile;
-    QMenu *menuScene;
+    QLineEdit *diffusionK;
+    QLineEdit *viscosityK;
+    QLabel *label_2;
+    QLabel *De;
+    QLabel *label_4;
+    QLineEdit *densityMag;
+    QLineEdit *velocityMag;
+    QGroupBox *SimulationVar;
+    QCheckBox *source1;
+    QCheckBox *source2;
+    QCheckBox *source3;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
 
@@ -120,191 +84,66 @@ public:
         parameterFrame->setGeometry(QRect(749, -1, 441, 731));
         parameterFrame->setFrameShape(QFrame::StyledPanel);
         parameterFrame->setFrameShadow(QFrame::Raised);
-        verticalLayoutWidget = new QWidget(parameterFrame);
-        verticalLayoutWidget->setObjectName(QString::fromUtf8("verticalLayoutWidget"));
-        verticalLayoutWidget->setGeometry(QRect(9, -1, 431, 731));
-        verticalLayout = new QVBoxLayout(verticalLayoutWidget);
-        verticalLayout->setSpacing(6);
-        verticalLayout->setContentsMargins(11, 11, 11, 11);
-        verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
-        verticalLayout->setContentsMargins(0, 0, 0, 0);
-        simOptionsBox = new QGroupBox(verticalLayoutWidget);
-        simOptionsBox->setObjectName(QString::fromUtf8("simOptionsBox"));
-        simOptionsBox->setMaximumSize(QSize(16777215, 220));
-        horizontalLayoutWidget = new QWidget(simOptionsBox);
-        horizontalLayoutWidget->setObjectName(QString::fromUtf8("horizontalLayoutWidget"));
-        horizontalLayoutWidget->setGeometry(QRect(9, 19, 421, 181));
-        horizontalLayout = new QHBoxLayout(horizontalLayoutWidget);
-        horizontalLayout->setSpacing(6);
-        horizontalLayout->setContentsMargins(11, 11, 11, 11);
-        horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
-        horizontalLayout->setContentsMargins(0, 0, 0, 0);
-        SimulationBox = new QGroupBox(horizontalLayoutWidget);
-        SimulationBox->setObjectName(QString::fromUtf8("SimulationBox"));
-        startSimulationButton = new QPushButton(SimulationBox);
-        startSimulationButton->setObjectName(QString::fromUtf8("startSimulationButton"));
-        startSimulationButton->setGeometry(QRect(10, 40, 181, 27));
-        startGameModeButton = new QPushButton(SimulationBox);
-        startGameModeButton->setObjectName(QString::fromUtf8("startGameModeButton"));
-        startGameModeButton->setGeometry(QRect(10, 110, 181, 27));
-
-        horizontalLayout->addWidget(SimulationBox);
-
-        SimParametersBox = new QGroupBox(horizontalLayoutWidget);
-        SimParametersBox->setObjectName(QString::fromUtf8("SimParametersBox"));
-        timeStepLabel = new QLabel(SimParametersBox);
-        timeStepLabel->setObjectName(QString::fromUtf8("timeStepLabel"));
-        timeStepLabel->setGeometry(QRect(10, 30, 81, 21));
-        newtonTolLabel = new QLabel(SimParametersBox);
-        newtonTolLabel->setObjectName(QString::fromUtf8("newtonTolLabel"));
-        newtonTolLabel->setGeometry(QRect(10, 50, 131, 21));
-        newtonMaxItersLabel = new QLabel(SimParametersBox);
-        newtonMaxItersLabel->setObjectName(QString::fromUtf8("newtonMaxItersLabel"));
-        newtonMaxItersLabel->setGeometry(QRect(10, 70, 131, 21));
-        timeStepEdit = new QLineEdit(SimParametersBox);
+        SimulationOptions = new QGroupBox(parameterFrame);
+        SimulationOptions->setObjectName(QString::fromUtf8("SimulationOptions"));
+        SimulationOptions->setGeometry(QRect(0, 10, 441, 301));
+        Simulate = new QPushButton(SimulationOptions);
+        Simulate->setObjectName(QString::fromUtf8("Simulate"));
+        Simulate->setGeometry(QRect(10, 40, 181, 31));
+        timeStep = new QLabel(SimulationOptions);
+        timeStep->setObjectName(QString::fromUtf8("timeStep"));
+        timeStep->setGeometry(QRect(20, 100, 66, 21));
+        timeStepEdit = new QLineEdit(SimulationOptions);
         timeStepEdit->setObjectName(QString::fromUtf8("timeStepEdit"));
-        timeStepEdit->setGeometry(QRect(140, 30, 61, 21));
-        newtonTolEdit = new QLineEdit(SimParametersBox);
-        newtonTolEdit->setObjectName(QString::fromUtf8("newtonTolEdit"));
-        newtonTolEdit->setGeometry(QRect(140, 50, 61, 21));
-        newtonMaxItersEdit = new QLineEdit(SimParametersBox);
-        newtonMaxItersEdit->setObjectName(QString::fromUtf8("newtonMaxItersEdit"));
-        newtonMaxItersEdit->setGeometry(QRect(140, 70, 61, 21));
-        penaltyStiffnessLabel = new QLabel(SimParametersBox);
-        penaltyStiffnessLabel->setObjectName(QString::fromUtf8("penaltyStiffnessLabel"));
-        penaltyStiffnessLabel->setGeometry(QRect(10, 90, 131, 21));
-        penaltyStiffnessEdit = new QLineEdit(SimParametersBox);
-        penaltyStiffnessEdit->setObjectName(QString::fromUtf8("penaltyStiffnessEdit"));
-        penaltyStiffnessEdit->setGeometry(QRect(140, 90, 61, 21));
-
-        horizontalLayout->addWidget(SimParametersBox);
-
-
-        verticalLayout->addWidget(simOptionsBox);
-
-        activeForcesBox = new QGroupBox(verticalLayoutWidget);
-        activeForcesBox->setObjectName(QString::fromUtf8("activeForcesBox"));
-        activeForcesBox->setMaximumSize(QSize(16777215, 170));
-        gravityCheckBox = new QCheckBox(activeForcesBox);
-        gravityCheckBox->setObjectName(QString::fromUtf8("gravityCheckBox"));
-        gravityCheckBox->setGeometry(QRect(30, 30, 97, 21));
-        gravityGLabel = new QLabel(activeForcesBox);
-        gravityGLabel->setObjectName(QString::fromUtf8("gravityGLabel"));
-        gravityGLabel->setGeometry(QRect(230, 30, 121, 21));
-        gravityGEdit = new QLineEdit(activeForcesBox);
-        gravityGEdit->setObjectName(QString::fromUtf8("gravityGEdit"));
-        gravityGEdit->setGeometry(QRect(370, 30, 51, 21));
-        label = new QLabel(activeForcesBox);
+        timeStepEdit->setGeometry(QRect(99, 96, 113, 31));
+        clearScene = new QPushButton(SimulationOptions);
+        clearScene->setObjectName(QString::fromUtf8("clearScene"));
+        clearScene->setGeometry(QRect(310, 40, 94, 29));
+        label = new QLabel(SimulationOptions);
         label->setObjectName(QString::fromUtf8("label"));
-        label->setGeometry(QRect(3, 70, 120, 17));
-        QFont font;
-        font.setBold(true);
-        font.setWeight(75);
-        label->setFont(font);
-        frictionCheckBox = new QCheckBox(activeForcesBox);
-        frictionCheckBox->setObjectName(QString::fromUtf8("frictionCheckBox"));
-        frictionCheckBox->setGeometry(QRect(30, 100, 97, 22));
-        CoeffRestitutionLabel = new QLabel(activeForcesBox);
-        CoeffRestitutionLabel->setObjectName(QString::fromUtf8("CoeffRestitutionLabel"));
-        CoeffRestitutionLabel->setGeometry(QRect(230, 90, 131, 17));
-        CoeffFrictionLabel = new QLabel(activeForcesBox);
-        CoeffFrictionLabel->setObjectName(QString::fromUtf8("CoeffFrictionLabel"));
-        CoeffFrictionLabel->setGeometry(QRect(230, 127, 131, 17));
-        coeffRestitutionEdit = new QLineEdit(activeForcesBox);
-        coeffRestitutionEdit->setObjectName(QString::fromUtf8("coeffRestitutionEdit"));
-        coeffRestitutionEdit->setGeometry(QRect(370, 90, 51, 21));
-        coeffFrictionEdit = new QLineEdit(activeForcesBox);
-        coeffFrictionEdit->setObjectName(QString::fromUtf8("coeffFrictionEdit"));
-        coeffFrictionEdit->setGeometry(QRect(369, 124, 51, 21));
-
-        verticalLayout->addWidget(activeForcesBox);
-
-        uiOptionsBox = new QGroupBox(verticalLayoutWidget);
-        uiOptionsBox->setObjectName(QString::fromUtf8("uiOptionsBox"));
-        layoutWidget = new QWidget(uiOptionsBox);
-        layoutWidget->setObjectName(QString::fromUtf8("layoutWidget"));
-        layoutWidget->setGeometry(QRect(10, 20, 419, 301));
-        verticalLayout_2 = new QVBoxLayout(layoutWidget);
-        verticalLayout_2->setSpacing(6);
-        verticalLayout_2->setContentsMargins(11, 11, 11, 11);
-        verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
-        verticalLayout_2->setContentsMargins(0, 0, 0, 0);
-        rigidBodyTypeBox = new QGroupBox(layoutWidget);
-        rigidBodyTypeBox->setObjectName(QString::fromUtf8("rigidBodyTypeBox"));
-        rigidBodyTypeBox->setMaximumSize(QSize(16777215, 200));
-        sphereButton = new QRadioButton(rigidBodyTypeBox);
-        sphereButton->setObjectName(QString::fromUtf8("sphereButton"));
-        sphereButton->setGeometry(QRect(10, 30, 117, 21));
-        twoByFourButton = new QRadioButton(rigidBodyTypeBox);
-        twoByFourButton->setObjectName(QString::fromUtf8("twoByFourButton"));
-        twoByFourButton->setGeometry(QRect(10, 50, 117, 21));
-        bunnyButton = new QRadioButton(rigidBodyTypeBox);
-        bunnyButton->setObjectName(QString::fromUtf8("bunnyButton"));
-        bunnyButton->setGeometry(QRect(10, 70, 117, 21));
-        customButton = new QRadioButton(rigidBodyTypeBox);
-        customButton->setObjectName(QString::fromUtf8("customButton"));
-        customButton->setGeometry(QRect(10, 90, 117, 21));
-        planeButton = new QRadioButton(rigidBodyTypeBox);
-        planeButton->setObjectName(QString::fromUtf8("planeButton"));
-        planeButton->setGeometry(QRect(10, 110, 116, 22));
-
-        verticalLayout_2->addWidget(rigidBodyTypeBox);
-
-        launchOptionsBox = new QGroupBox(layoutWidget);
-        launchOptionsBox->setObjectName(QString::fromUtf8("launchOptionsBox"));
-        launchOptionsBox->setMinimumSize(QSize(0, 0));
-        launchOptionsBox->setBaseSize(QSize(0, 0));
-        launchVelLabel = new QLabel(launchOptionsBox);
-        launchVelLabel->setObjectName(QString::fromUtf8("launchVelLabel"));
-        launchVelLabel->setGeometry(QRect(10, 50, 111, 17));
-        launchVelEdit = new QLineEdit(launchOptionsBox);
-        launchVelEdit->setObjectName(QString::fromUtf8("launchVelEdit"));
-        launchVelEdit->setGeometry(QRect(130, 50, 51, 21));
-        randomOrienatationCheckBox = new QCheckBox(launchOptionsBox);
-        randomOrienatationCheckBox->setObjectName(QString::fromUtf8("randomOrienatationCheckBox"));
-        randomOrienatationCheckBox->setGeometry(QRect(10, 70, 181, 22));
-        randomAngularVelCheckBox = new QCheckBox(launchOptionsBox);
-        randomAngularVelCheckBox->setObjectName(QString::fromUtf8("randomAngularVelCheckBox"));
-        randomAngularVelCheckBox->setGeometry(QRect(10, 90, 171, 22));
-        densityLabel = new QLabel(launchOptionsBox);
-        densityLabel->setObjectName(QString::fromUtf8("densityLabel"));
-        densityLabel->setGeometry(QRect(10, 30, 111, 17));
-        densityEdit = new QLineEdit(launchOptionsBox);
-        densityEdit->setObjectName(QString::fromUtf8("densityEdit"));
-        densityEdit->setGeometry(QRect(130, 30, 51, 21));
-        randomVelMagLabel = new QLabel(launchOptionsBox);
-        randomVelMagLabel->setObjectName(QString::fromUtf8("randomVelMagLabel"));
-        randomVelMagLabel->setGeometry(QRect(220, 90, 111, 17));
-        randomVelMagEdit = new QLineEdit(launchOptionsBox);
-        randomVelMagEdit->setObjectName(QString::fromUtf8("randomVelMagEdit"));
-        randomVelMagEdit->setGeometry(QRect(310, 90, 51, 21));
-
-        verticalLayout_2->addWidget(launchOptionsBox);
-
-
-        verticalLayout->addWidget(uiOptionsBox);
-
+        label->setGeometry(QRect(10, 150, 101, 21));
+        diffusionK = new QLineEdit(SimulationOptions);
+        diffusionK->setObjectName(QString::fromUtf8("diffusionK"));
+        diffusionK->setGeometry(QRect(110, 143, 113, 31));
+        viscosityK = new QLineEdit(SimulationOptions);
+        viscosityK->setObjectName(QString::fromUtf8("viscosityK"));
+        viscosityK->setGeometry(QRect(110, 187, 113, 31));
+        label_2 = new QLabel(SimulationOptions);
+        label_2->setObjectName(QString::fromUtf8("label_2"));
+        label_2->setGeometry(QRect(13, 190, 91, 21));
+        De = new QLabel(SimulationOptions);
+        De->setObjectName(QString::fromUtf8("De"));
+        De->setGeometry(QRect(20, 230, 131, 21));
+        label_4 = new QLabel(SimulationOptions);
+        label_4->setObjectName(QString::fromUtf8("label_4"));
+        label_4->setGeometry(QRect(20, 265, 131, 21));
+        densityMag = new QLineEdit(SimulationOptions);
+        densityMag->setObjectName(QString::fromUtf8("densityMag"));
+        densityMag->setGeometry(QRect(152, 226, 113, 31));
+        velocityMag = new QLineEdit(SimulationOptions);
+        velocityMag->setObjectName(QString::fromUtf8("velocityMag"));
+        velocityMag->setGeometry(QRect(152, 260, 113, 31));
+        SimulationVar = new QGroupBox(parameterFrame);
+        SimulationVar->setObjectName(QString::fromUtf8("SimulationVar"));
+        SimulationVar->setGeometry(QRect(10, 360, 421, 361));
+        source1 = new QCheckBox(SimulationVar);
+        source1->setObjectName(QString::fromUtf8("source1"));
+        source1->setGeometry(QRect(20, 50, 95, 26));
+        source1->setAcceptDrops(false);
+        source1->setChecked(true);
+        source2 = new QCheckBox(SimulationVar);
+        source2->setObjectName(QString::fromUtf8("source2"));
+        source2->setGeometry(QRect(120, 50, 95, 26));
+        source3 = new QCheckBox(SimulationVar);
+        source3->setObjectName(QString::fromUtf8("source3"));
+        source3->setGeometry(QRect(240, 50, 95, 26));
         MainWindow->setCentralWidget(centralWidget);
-        menuBar = new QMenuBar(MainWindow);
-        menuBar->setObjectName(QString::fromUtf8("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 1200, 25));
-        menuFile = new QMenu(menuBar);
-        menuFile->setObjectName(QString::fromUtf8("menuFile"));
-        menuScene = new QMenu(menuBar);
-        menuScene->setObjectName(QString::fromUtf8("menuScene"));
-        MainWindow->setMenuBar(menuBar);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QString::fromUtf8("mainToolBar"));
         MainWindow->addToolBar(Qt::TopToolBarArea, mainToolBar);
         statusBar = new QStatusBar(MainWindow);
         statusBar->setObjectName(QString::fromUtf8("statusBar"));
         MainWindow->setStatusBar(statusBar);
-
-        menuBar->addAction(menuFile->menuAction());
-        menuBar->addAction(menuScene->menuAction());
-        menuFile->addAction(actionExit);
-        menuScene->addAction(actionReset);
-        menuScene->addAction(actionReset_Everything);
 
         retranslateUi(MainWindow);
 
@@ -317,37 +156,23 @@ public:
         actionExit->setText(QApplication::translate("MainWindow", "Exit", 0, QApplication::UnicodeUTF8));
         actionReset->setText(QApplication::translate("MainWindow", "Clear Scene", 0, QApplication::UnicodeUTF8));
         actionReset_Everything->setText(QApplication::translate("MainWindow", "Reset Everything", 0, QApplication::UnicodeUTF8));
-        simOptionsBox->setTitle(QApplication::translate("MainWindow", "Simulation Options", 0, QApplication::UnicodeUTF8));
-        SimulationBox->setTitle(QApplication::translate("MainWindow", "Simulation Controls", 0, QApplication::UnicodeUTF8));
-        startSimulationButton->setText(QApplication::translate("MainWindow", "Start Simulation", 0, QApplication::UnicodeUTF8));
-        startGameModeButton->setText(QApplication::translate("MainWindow", "Start Game Mode", 0, QApplication::UnicodeUTF8));
-        SimParametersBox->setTitle(QApplication::translate("MainWindow", "Parameters", 0, QApplication::UnicodeUTF8));
-        timeStepLabel->setText(QApplication::translate("MainWindow", "Time Step:", 0, QApplication::UnicodeUTF8));
-        newtonTolLabel->setText(QApplication::translate("MainWindow", "Newton Tolerance:", 0, QApplication::UnicodeUTF8));
-        newtonMaxItersLabel->setText(QApplication::translate("MainWindow", "Newton Max Iters:", 0, QApplication::UnicodeUTF8));
-        penaltyStiffnessLabel->setText(QApplication::translate("MainWindow", "Penalty Stiffness:", 0, QApplication::UnicodeUTF8));
-        activeForcesBox->setTitle(QApplication::translate("MainWindow", "Active Forces", 0, QApplication::UnicodeUTF8));
-        gravityCheckBox->setText(QApplication::translate("MainWindow", "Gravity", 0, QApplication::UnicodeUTF8));
-        gravityGLabel->setText(QApplication::translate("MainWindow", "Acceleration:", 0, QApplication::UnicodeUTF8));
-        label->setText(QApplication::translate("MainWindow", "Contact Settings", 0, QApplication::UnicodeUTF8));
-        frictionCheckBox->setText(QApplication::translate("MainWindow", "Friction", 0, QApplication::UnicodeUTF8));
-        CoeffRestitutionLabel->setText(QApplication::translate("MainWindow", "Coeff Restitution :", 0, QApplication::UnicodeUTF8));
-        CoeffFrictionLabel->setText(QApplication::translate("MainWindow", "Coeff Friction :", 0, QApplication::UnicodeUTF8));
-        uiOptionsBox->setTitle(QApplication::translate("MainWindow", "UI Options", 0, QApplication::UnicodeUTF8));
-        rigidBodyTypeBox->setTitle(QApplication::translate("MainWindow", "Rigid Body Type", 0, QApplication::UnicodeUTF8));
-        sphereButton->setText(QApplication::translate("MainWindow", "Sphere", 0, QApplication::UnicodeUTF8));
-        twoByFourButton->setText(QApplication::translate("MainWindow", "Two by Four", 0, QApplication::UnicodeUTF8));
-        bunnyButton->setText(QApplication::translate("MainWindow", "Bunny", 0, QApplication::UnicodeUTF8));
-        customButton->setText(QApplication::translate("MainWindow", "Custom", 0, QApplication::UnicodeUTF8));
-        planeButton->setText(QApplication::translate("MainWindow", "Plane", 0, QApplication::UnicodeUTF8));
-        launchOptionsBox->setTitle(QApplication::translate("MainWindow", "Rigid Body Options", 0, QApplication::UnicodeUTF8));
-        launchVelLabel->setText(QApplication::translate("MainWindow", "Launch Velocity:", 0, QApplication::UnicodeUTF8));
-        randomOrienatationCheckBox->setText(QApplication::translate("MainWindow", "Random Orientation", 0, QApplication::UnicodeUTF8));
-        randomAngularVelCheckBox->setText(QApplication::translate("MainWindow", "Random Angular Vel", 0, QApplication::UnicodeUTF8));
-        densityLabel->setText(QApplication::translate("MainWindow", "Density:", 0, QApplication::UnicodeUTF8));
-        randomVelMagLabel->setText(QApplication::translate("MainWindow", "Magnitude:", 0, QApplication::UnicodeUTF8));
-        menuFile->setTitle(QApplication::translate("MainWindow", "File", 0, QApplication::UnicodeUTF8));
-        menuScene->setTitle(QApplication::translate("MainWindow", "Scene", 0, QApplication::UnicodeUTF8));
+        SimulationOptions->setTitle(QApplication::translate("MainWindow", "Simulation Options", 0, QApplication::UnicodeUTF8));
+        Simulate->setText(QApplication::translate("MainWindow", "Start Simulation", 0, QApplication::UnicodeUTF8));
+        timeStep->setText(QApplication::translate("MainWindow", "Time Step", 0, QApplication::UnicodeUTF8));
+        timeStepEdit->setText(QApplication::translate("MainWindow", "0.001", 0, QApplication::UnicodeUTF8));
+        clearScene->setText(QApplication::translate("MainWindow", "Clear Scene", 0, QApplication::UnicodeUTF8));
+        label->setText(QApplication::translate("MainWindow", "Diffusion Coff", 0, QApplication::UnicodeUTF8));
+        diffusionK->setText(QApplication::translate("MainWindow", "0.03", 0, QApplication::UnicodeUTF8));
+        viscosityK->setText(QApplication::translate("MainWindow", "0.2", 0, QApplication::UnicodeUTF8));
+        label_2->setText(QApplication::translate("MainWindow", "Viscosity Coff", 0, QApplication::UnicodeUTF8));
+        De->setText(QApplication::translate("MainWindow", "Density Magnitude", 0, QApplication::UnicodeUTF8));
+        label_4->setText(QApplication::translate("MainWindow", "Velocity Magnitude", 0, QApplication::UnicodeUTF8));
+        densityMag->setText(QApplication::translate("MainWindow", "200", 0, QApplication::UnicodeUTF8));
+        velocityMag->setText(QApplication::translate("MainWindow", "200", 0, QApplication::UnicodeUTF8));
+        SimulationVar->setTitle(QApplication::translate("MainWindow", "Simulation Variables", 0, QApplication::UnicodeUTF8));
+        source1->setText(QApplication::translate("MainWindow", "Source1", 0, QApplication::UnicodeUTF8));
+        source2->setText(QApplication::translate("MainWindow", "Source2", 0, QApplication::UnicodeUTF8));
+        source3->setText(QApplication::translate("MainWindow", "Source3", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };

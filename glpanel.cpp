@@ -219,6 +219,11 @@ void GLPanel::keyPressEvent(QKeyEvent *ke)
         addFluid_   |= WALL1;
         QMetaObject::invokeMethod(cont_, "keyToAddFluid", Q_ARG(int, 1));
         break;
+
+    case 'V':
+        addFluid_   |= WALL2;
+        QMetaObject::invokeMethod(cont_, "keyToAddVel", Q_ARG(int, 1), Q_ARG(double, 10000), Q_ARG(double, 200), Q_ARG(double, 200));
+        break;
     }
 }
 
@@ -250,33 +255,6 @@ void GLPanel::tick()
     c_.translateEye(dir);
 }
 
-/*
-void GLPanel::tick2()
-{
-
-    Vector3d right, up, center;
-    c_.getSpanningSet(right, up, center);
-    center[2] = 0;
-    center.normalize();
-    right[2] = 0;
-    right.normalize();
-    int fwdamt = 0;
-    if(translateDir_ & TD_FWD)
-        fwdamt++;
-    if(translateDir_ & TD_BACK)
-        fwdamt--;
-    Vector3d dir = fwdamt*center;
-    int rghtamt = 0;
-    if(translateDir_ & TD_LEFT)
-        rghtamt--;
-    if(translateDir_ & TD_RIGHT)
-        rghtamt++;
-    dir += rghtamt*right;
-    double dnorm = dir.norm();
-    if(dnorm != 0)
-        dir /= dnorm;
-}
-*/
 void GLPanel::keyReleaseEvent(QKeyEvent *ke)
 {
     switch(ke->key())
@@ -296,6 +274,10 @@ void GLPanel::keyReleaseEvent(QKeyEvent *ke)
 
     case 'Q':
         addFluid_   &= ~WALL1;
+        break;
+
+    case 'V':
+        addVelocity_   &= ~WALL2;
         break;
     }
 }

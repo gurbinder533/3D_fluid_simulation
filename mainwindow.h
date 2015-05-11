@@ -24,7 +24,7 @@ public slots:
 
 private slots:
     void updateGL();
-
+/*
     void on_actionExit_triggered();
 
     void on_actionReset_Everything_triggered();
@@ -73,11 +73,30 @@ private slots:
 
     void on_penaltyStiffnessEdit_editingFinished();
 
+    void on_tempSlider_sliderReleased();
+*/
+    void on_Simulate_clicked();
+
+    void on_timeStepEdit_editingFinished();
+
+    void on_clearScene_clicked();
+
+    void on_source1_clicked();
+
+    void on_source2_clicked();
+
+    void on_source3_clicked();
+
+    void on_diffusionK_editingFinished();
+
+    void on_viscosityK_editingFinished();
+
+    void on_densityMag_editingFinished();
+
 private:
     Controller &cont_;
     Ui::MainWindow *ui;
     bool simRunning_;
-    bool gameRunning_;
     QTimer renderTimer_;
 
     void setParametersFromUI();

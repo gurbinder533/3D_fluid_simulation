@@ -45,6 +45,7 @@ private:
     Camera c_;
     int translateDir_;
     int addFluid_;
+    int addVelocity_;
     Rotator rotator_;
     //Zoomer zoomer_;
     Eigen::Vector4d lightPos_;
