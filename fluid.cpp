@@ -8,7 +8,7 @@ using namespace std;
 Fluid::Fluid()
 {
 
-    this->n = 62;
+    this->n = 30;
     this->size = (n+2)*(n+2)*(n+2);
     this->fluidDensity3d.resize(size);
 
@@ -64,18 +64,18 @@ Fluid::Fluid()
     this->sizeOfVoxel = 2.0/(this->n+1);
     this->debug = true;
 
-     for(int i = 0; i < n; ++i)
-     {
-         for(int j = 0; j < n; ++j)
-         {
-             for(int k = 0; k < n/2; ++k)
-             {
-                //std::cout << COFF(i,j,0) << "\n";
-                this->fluidDensity3d[COFF(i,j,k)] = 255.0;
-             }
-         }
+//     for(int i = 0; i < n; ++i)
+//     {
+//         for(int j = 0; j < n; ++j)
+//         {
+//             for(int k = 0; k < n; ++k)
+//             {
+//                //std::cout << COFF(i,j,0) << "\n";
+//                this->fluidDensity3d[COFF(i,j,k)] = 255.0;
+//             }
+//         }
 
-     }
+//     }
 
 }
 
@@ -83,9 +83,12 @@ void Fluid::render()
 {
 
     //std::cout << "FLUID RENDER\n";
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     double xCell = -1;
     double yCell = 1;
     double zCell = 1;
+//    cout << "Render" << endl;
     for(int i =0; i <= n; i++)
     {
         xCell = i * this->sizeOfVoxel - 1 ;
@@ -96,14 +99,25 @@ void Fluid::render()
             {
                 zCell = 1 - k * this->sizeOfVoxel;
                 float dens = fluidDensity3d[COFF(i, j, k)];
-             //   if(dens == 255.0)
-                 //  std::cout << "DEN : " << dens <<"\n";
+//                cout << dens << endl;
 
-                glColor3f(255-dens,255-dens,255-dens);
+                if (dens > 0)
+                {
+                    //glColor4f(255.0-dens, 255.0-dens, 255.0, 0.2);
+                    glColor4f(1.0-dens, 1.0-dens, 255.0, dens*20*n);
+//                    glColor4f(0, 0, 255.0, 1);
+                }
+                else
+                {
+                    glColor4f(255.0, 255.0, 255.0, 0.0);
+//                    glColor3f(1-dens, 1-dens, 1);
+//                    glColor4f(0, 0, 255.0, 0);
+                }
 
                 //glColor3f(1,0,0);
                 //std::cout << " xcell " << xCell << " , ycell " << yCell << " , zCell " << zCell << "\n";
                 //std::cout << " Voxel size : " << this->sizeOfVoxel << "\n";
+
                 glBegin(GL_QUADS);
                 {
 
@@ -176,7 +190,7 @@ void Fluid::zeroEverything()
     std::fill(vz3d.begin(), vz3d.end(), 0);
     std::fill(vz3dOld.begin(), vz3dOld.end(), 0);
 */
-/*
+
     fluidDensity3d.setZero();
     fluidDensity3dOld.setZero();
     vx3d.setZero();
@@ -185,6 +199,5 @@ void Fluid::zeroEverything()
     vx3dOld.setZero();
     vy3dOld.setZero();
     vz3dOld.setZero();
-*/
 
 }

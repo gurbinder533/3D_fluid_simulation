@@ -9,7 +9,9 @@
 
 using namespace std;
 
-#define COFF(x,y,z) (((z)<<12) + ((y)<<6)+x)
+//#define COFF(x,y,z) (((z)<<12) + ((y)<<6)+x)
+#define COFF(x,y,z) (((z)<<10) + ((y)<<5)+x)
+//#define COFF(x,y,z) (((z)*16*16) + ((y)*16)+x)
 
 class Fluid
 {

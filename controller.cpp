@@ -139,8 +139,8 @@ void Controller::leftMouseClicked(double x, double y)
 void Controller::keyToAddFluid(int i)
 {
     std::cout << " Q pressed  " << i << " \n";
-    //sim_->addDensity(5,5);
-
-    //sim_->addDensity(3,2);
+    std::cout << std::endl;
+    //sim_->addDensity(1);
+    sim_->addDensity(2);
 
 }

@@ -40,7 +40,7 @@ public:
    void swap(Eigen::VectorXf &left, Eigen::VectorXf &right);
    void addSource(Eigen::VectorXf &d, Eigen::VectorXf& dOld);
    void addVelocity(double x, double y, double velX, double velY);
-   void addDensity(double x, double y);
+   void addDensity(int sourceNo);
    void setBoundry(int b, Eigen::VectorXf& m);
 ///////////////////////////////////////////////
 

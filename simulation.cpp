@@ -272,6 +272,8 @@ void Simulation::takeSimulationStep()
 
 void Simulation::fluidSimulationStep()
 {
+//    this->swap(fluid_->fluidDensity3d, fluid_->fluidDensity3dOld);
+//    return;
     addSource(fluid_->vx3d, fluid_->vx3dOld);
     addSource(fluid_->vy3d, fluid_->vy3dOld);
     addSource(fluid_->vz3d, fluid_->vz3dOld);
@@ -572,68 +574,92 @@ void Simulation::advection(int boundry, VectorXf &d, VectorXf &dOld, VectorXf &x
     setBoundry(boundry, d);
 }
 
-/*
-void Simulation::addDensity(double x, double y)
+void Simulation::addDensity(int sourceNo)
 {
-    int i = floor((x+1)/fluid_->sizeOfVoxel);
-    int j = -1* floor((y-1)/fluid_->sizeOfVoxel);
+    if (sourceNo == 1)
+    {
+        int i = 3;
+        int j = 3;
+        int k = 3;
+        cout << "HERE1 : " << COFF(i,j,k) << endl;
+        fluid_->fluidDensity3dOld[COFF(i,j,k)] += 500;
 
-    if(i >= 0 && i <fluid_->n && j >= 0 && j < fluid_->n)
-    {
-        fluid_->fluidDensityOld.coeffRef(i,j) += params_.densityMagnitude;
+//        for(int r = 1; r <= params_.densityRadius; r++)
+//        {
+//            if(i-r >= 0 && i+r <fluid_->n && j-r >= 0 && j+r < fluid_->n)
+//            {
+//                fluid_->fluidDensityOld.coeffRef(i-r,j-r) += params_.densityMagnitude;
+//                fluid_->fluidDensityOld.coeffRef(i-r,j) += params_.densityMagnitude;
+//                fluid_->fluidDensityOld.coeffRef(i-r,j+r) += params_.densityMagnitude;
+//                fluid_->fluidDensityOld.coeffRef(i,j+r) += params_.densityMagnitude;
+//                fluid_->fluidDensityOld.coeffRef(i+r,j+r) += params_.densityMagnitude;
+//                fluid_->fluidDensityOld.coeffRef(i+r,j) += params_.densityMagnitude;
+//                fluid_->fluidDensityOld.coeffRef(i+r,j-r) += params_.densityMagnitude;
+//                fluid_->fluidDensityOld.coeffRef(i,j-r) += params_.densityMagnitude;
+//            }
+//        }
     }
-    for(int r = 1; r <= params_.densityRadius; r++)
+    else if (sourceNo == 2)
     {
-        if(i-r >= 0 && i+r <fluid_->n && j-r >= 0 && j+r < fluid_->n)
-        {
-            fluid_->fluidDensityOld.coeffRef(i-r,j-r) += params_.densityMagnitude;
-            fluid_->fluidDensityOld.coeffRef(i-r,j) += params_.densityMagnitude;
-            fluid_->fluidDensityOld.coeffRef(i-r,j+r) += params_.densityMagnitude;
-            fluid_->fluidDensityOld.coeffRef(i,j+r) += params_.densityMagnitude;
-            fluid_->fluidDensityOld.coeffRef(i+r,j+r) += params_.densityMagnitude;
-            fluid_->fluidDensityOld.coeffRef(i+r,j) += params_.densityMagnitude;
-            fluid_->fluidDensityOld.coeffRef(i+r,j-r) += params_.densityMagnitude;
-            fluid_->fluidDensityOld.coeffRef(i,j-r) += params_.densityMagnitude;
-        }
+        int i = fluid_->n -1;
+        int j = fluid_->n -1;
+        int k = fluid_->n -1;
+        cout << "HERE2 : " << COFF(i,j,k) << endl;
+        fluid_->fluidDensity3dOld[COFF(i,j,k)] += 400;
+
+//        for(int r = 1; r <= params_.densityRadius; r++)
+//        {
+//            if(i-r >= 0 && i+r <fluid_->n && j-r >= 0 && j+r < fluid_->n)
+//            {
+//                fluid_->fluidDensityOld.coeffRef(i-r,j-r) += params_.densityMagnitude;
+//                fluid_->fluidDensityOld.coeffRef(i-r,j) += params_.densityMagnitude;
+//                fluid_->fluidDensityOld.coeffRef(i-r,j+r) += params_.densityMagnitude;
+//                fluid_->fluidDensityOld.coeffRef(i,j+r) += params_.densityMagnitude;
+//                fluid_->fluidDensityOld.coeffRef(i+r,j+r) += params_.densityMagnitude;
+//                fluid_->fluidDensityOld.coeffRef(i+r,j) += params_.densityMagnitude;
+//                fluid_->fluidDensityOld.coeffRef(i+r,j-r) += params_.densityMagnitude;
+//                fluid_->fluidDensityOld.coeffRef(i,j-r) += params_.densityMagnitude;
+//            }
+//        }
     }
 }
 
-void Simulation::addVelocity(double x, double y, double velX, double velY)
-{
-    int i = floor((x+1)/fluid_->sizeOfVoxel);
-    int j = -1* floor((y-1)/fluid_->sizeOfVoxel);
-    if(i >= 0 && i <fluid_->n && j >= 0 && j < fluid_->n)
-    {
-        fluid_->vxOld.coeffRef(i,j) += velX;
-        fluid_->vyOld.coeffRef(i,j) += velY;
-    }
-    for(int r = 1; r <= params_.velocityRadius; r++)
-    {
-        if(i-r >= 0 && i+r <fluid_->n && j-r >= 0 && j+r < fluid_->n)
-        {
+//void Simulation::addVelocity(double x, double y, double velX, double velY)
+//{
+//    int i = floor((x+1)/fluid_->sizeOfVoxel);
+//    int j = -1* floor((y-1)/fluid_->sizeOfVoxel);
+//    if(i >= 0 && i <fluid_->n && j >= 0 && j < fluid_->n)
+//    {
+//        fluid_->vxOld.coeffRef(i,j) += velX;
+//        fluid_->vyOld.coeffRef(i,j) += velY;
+//    }
+//    for(int r = 1; r <= params_.velocityRadius; r++)
+//    {
+//        if(i-r >= 0 && i+r <fluid_->n && j-r >= 0 && j+r < fluid_->n)
+//        {
 //            cout<<"Here : "<<velX<<" : "<<velY<<endl;
-            fluid_->vxOld.coeffRef(i-r,j-r) += velX;
-            fluid_->vxOld.coeffRef(i-r,j) += velX;
-            fluid_->vxOld.coeffRef(i-r,j+r) += velX;
-            fluid_->vxOld.coeffRef(i,j+r) += velX;
-            fluid_->vxOld.coeffRef(i+r,j+r) += velX;
-            fluid_->vxOld.coeffRef(i+r,j) += velX;
-            fluid_->vxOld.coeffRef(i+r,j-r) += velX;
-            fluid_->vxOld.coeffRef(i,j-r) += velX;
+//            fluid_->vxOld.coeffRef(i-r,j-r) += velX;
+//            fluid_->vxOld.coeffRef(i-r,j) += velX;
+//            fluid_->vxOld.coeffRef(i-r,j+r) += velX;
+//            fluid_->vxOld.coeffRef(i,j+r) += velX;
+//            fluid_->vxOld.coeffRef(i+r,j+r) += velX;
+//            fluid_->vxOld.coeffRef(i+r,j) += velX;
+//            fluid_->vxOld.coeffRef(i+r,j-r) += velX;
+//            fluid_->vxOld.coeffRef(i,j-r) += velX;
 
-            fluid_->vyOld.coeffRef(i,j) += velY;
-            fluid_->vyOld.coeffRef(i-r,j-r) += velY;
-            fluid_->vyOld.coeffRef(i-r,j) += velY;
-            fluid_->vyOld.coeffRef(i-r,j+r) += velY;
-            fluid_->vyOld.coeffRef(i,j+r) += velY;
-            fluid_->vyOld.coeffRef(i+r,j+r) += velY;
-            fluid_->vyOld.coeffRef(i+r,j) += velY;
-            fluid_->vyOld.coeffRef(i+r,j-r) += velY;
-            fluid_->vyOld.coeffRef(i,j-r) += velY;
-        }
-    }
-}
-*/
+//            fluid_->vyOld.coeffRef(i,j) += velY;
+//            fluid_->vyOld.coeffRef(i-r,j-r) += velY;
+//            fluid_->vyOld.coeffRef(i-r,j) += velY;
+//            fluid_->vyOld.coeffRef(i-r,j+r) += velY;
+//            fluid_->vyOld.coeffRef(i,j+r) += velY;
+//            fluid_->vyOld.coeffRef(i+r,j+r) += velY;
+//            fluid_->vyOld.coeffRef(i+r,j) += velY;
+//            fluid_->vyOld.coeffRef(i+r,j-r) += velY;
+//            fluid_->vyOld.coeffRef(i,j-r) += velY;
+//        }
+//    }
+//}
+
 void Simulation::clearScene()
 {
     renderLock_.lock();
@@ -643,8 +669,6 @@ void Simulation::clearScene()
         groundPlane.pos << 0,0,0;
         groundPlane.normal << 0,0,1;
         planes_.push_back(groundPlane);
-
-
         fluid_->zeroEverything();
     }
     renderLock_.unlock();
