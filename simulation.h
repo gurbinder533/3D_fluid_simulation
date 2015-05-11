@@ -42,6 +42,8 @@ public:
    void addVelocity(double x, double y, double velX, double velY);
    void addDensity(int sourceNo);
    void setBoundry(int b, Eigen::VectorXf& m);
+   void addBuoyancy();
+   void smokeEffect();
 ///////////////////////////////////////////////
 
 

@@ -18,22 +18,10 @@ class Fluid
 public:
     Fluid();
 
-
-    /*
-    vector<float> fluidDensity3d, fluidDensity3dOld;
-    vector<float> vy3d, vy3dOld;
-    vector<float> vx3d, vx3dOld;
-    vector<float> vz3d, vz3dOld;
-    */
-
     Eigen::VectorXf fluidDensity3d, fluidDensity3dOld;
     Eigen::VectorXf vy3d, vy3dOld;
     Eigen::VectorXf vx3d, vx3dOld;
     Eigen::VectorXf vz3d, vz3dOld;
-
-    //Eigen::MatrixXd fluidDensity, fluidDensityOld;
-    //Eigen::MatrixXd vy, vyOld;
-    //Eigen::MatrixXd vx, vxOld;
 
 
 

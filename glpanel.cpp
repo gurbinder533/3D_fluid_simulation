@@ -24,7 +24,8 @@ void GLPanel::initializeGL()
     glShadeModel(GL_SMOOTH);
     glClearColor(1.0, 1.0, 1.0, 0.0);
     glClearDepth(1.0);
-    //glEnable(GL_DEPTH_TEST);
+    glDisable(GL_DEPTH_TEST);
+    glCullFace(GL_FRONT);
     glDepthFunc(GL_LEQUAL);
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);

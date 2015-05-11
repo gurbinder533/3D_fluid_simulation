@@ -218,34 +218,7 @@ void Simulation::renderPlane(const Plane &p, bool isFloor)
 
     glPopMatrix();
 
-  /*
-   glBegin(GL_QUADS);
-    {
 
-
-        glTexCoord2f(texmax, texmax);
-        glNormal3f(p.normal[0], p.normal[1], p.normal[2]);
-        corner = p.pos + gridsize*tangent1 + gridsize*tangent2;
-        glVertex3f(corner[0], corner[1], corner[2]);
-
-        glTexCoord2f(texmax, -texmax);
-        glNormal3f(p.normal[0], p.normal[1], p.normal[2]);
-        corner = p.pos + gridsize*tangent1 - gridsize*tangent2;
-        glVertex3f(corner[0], corner[1], corner[2]);
-
-        glTexCoord2f(-texmax, -texmax);
-        glNormal3f(p.normal[0], p.normal[1], p.normal[2]);
-        corner = p.pos - gridsize*tangent1 - gridsize*tangent2;
-        glVertex3f(corner[0], corner[1], corner[2]);
-
-        glTexCoord2f(-texmax, texmax);
-        glNormal3f(p.normal[0], p.normal[1], p.normal[2]);
-        corner = p.pos - gridsize*tangent1 + gridsize*tangent2;
-        glVertex3f(corner[0], corner[1], corner[2]);
-    }
-    glDisable(GL_TEXTURE_2D);
-    glEnd();
-    */
 }
 
 
@@ -274,51 +247,55 @@ void Simulation::fluidSimulationStep()
 {
 //    this->swap(fluid_->fluidDensity3d, fluid_->fluidDensity3dOld);
 //    return;
+
+// Velocity Code
     addSource(fluid_->vx3d, fluid_->vx3dOld);
     addSource(fluid_->vy3d, fluid_->vy3dOld);
     addSource(fluid_->vz3d, fluid_->vz3dOld);
-    // Velocity Code
+    addBuoyancy();
+    smokeEffect();
 
+
+
+
+/*******************ADVECTION*********************************************/
     this->swap(fluid_->vx3d, fluid_->vx3dOld);
     this->swap(fluid_->vy3d, fluid_->vy3dOld);
     this->swap(fluid_->vy3d, fluid_->vz3dOld);
 
-//    cout<<"Velocity X : \n"<<fluid_->vx<<endl;
-//    cout<<"Velocity Y : \n"<<fluid_->vy<<endl;
-
     //TODO: we need to CHANGE THIS
     advection(1, fluid_->vx3d, fluid_->vx3dOld, fluid_->vx3dOld, fluid_->vy3dOld, fluid_->vz3dOld);
     advection(2, fluid_->vy3d, fluid_->vy3dOld, fluid_->vx3dOld, fluid_->vy3dOld, fluid_->vz3dOld);
-    advection(2, fluid_->vz3d, fluid_->vz3dOld, fluid_->vx3dOld, fluid_->vy3dOld, fluid_->vz3dOld);
+    advection(3, fluid_->vz3d, fluid_->vz3dOld, fluid_->vx3dOld, fluid_->vy3dOld, fluid_->vz3dOld);
 
     project(fluid_->vx3d, fluid_->vy3d, fluid_->vz3d, fluid_->vx3dOld, fluid_->vy3dOld, fluid_->vz3dOld);
 
+/*******************ADVECTION*********************************************/
+
+/************************DIFFUSE****************************************/
     this->swap(fluid_->vx3d, fluid_->vx3dOld);
     this->swap(fluid_->vy3d, fluid_->vy3dOld);
     this->swap(fluid_->vz3d, fluid_->vz3dOld);
 
     diffuse(1, fluid_->vx3d, fluid_->vx3dOld, params_.viscosityFluid);
     diffuse(2, fluid_->vy3d, fluid_->vy3dOld, params_.viscosityFluid);
-    diffuse(2, fluid_->vz3d, fluid_->vz3dOld, params_.viscosityFluid);
+    diffuse(3, fluid_->vz3d, fluid_->vz3dOld, params_.viscosityFluid);
 
     project(fluid_->vx3d, fluid_->vy3d, fluid_->vz3d, fluid_->vx3dOld, fluid_->vy3dOld, fluid_->vz3dOld);
+/************************DIFFUSE****************************************/
+
 
     //Density Code
     addSource(fluid_->fluidDensity3d, fluid_->fluidDensity3dOld);
+
+
     this->swap(fluid_->fluidDensity3d, fluid_->fluidDensity3dOld);
-
-
     diffuse(0, fluid_->fluidDensity3d, fluid_->fluidDensity3dOld, params_.diffusionConstant);
-    this->swap(fluid_->fluidDensity3d, fluid_->fluidDensity3dOld);
 
+
+    this->swap(fluid_->fluidDensity3d, fluid_->fluidDensity3dOld);
     advection(0, fluid_->fluidDensity3d, fluid_->fluidDensity3dOld, fluid_->vx3d, fluid_->vy3d, fluid_->vz3d);
 
- /*
-    std::fill(fluid_->fluidDensity3dOld.begin(), fluid_->fluidDensity3dOld.end(), 0);
-    std::fill(fluid_->vx3dOld.begin(), fluid_->vx3dOld.end(), 0);
-    std::fill(fluid_->vy3dOld.begin(), fluid_->vy3dOld.end(), 0);
-    std::fill(fluid_->vz3dOld.begin(), fluid_->vz3dOld.end(), 0);
- */
 
 
 
@@ -377,12 +354,6 @@ void Simulation::project(Eigen::VectorXf &x, Eigen::VectorXf &y, Eigen::VectorXf
                                     + y[COFF(i,j+1,k)] - y[COFF(i,j-1,k)]
                                     + z[COFF(i,j,k+1)] - z[COFF(i,j,k-1)]) * (-1)/(3*fluid_->n);
 
-                /*
-                yOld.coeffRef(i,j) = (x.coeff(i+1, j) - x.coeff(i-1, j)
-                                    + y.coeff(i,j+1) - y.coeff(i,j-1)) * -0.5f / fluid_->n;
-
-               */
-
 
             }
 
@@ -390,13 +361,9 @@ void Simulation::project(Eigen::VectorXf &x, Eigen::VectorXf &y, Eigen::VectorXf
     }
 
     xOld.setZero();
-   // zOld.setZero();
 
     setBoundry(0,yOld);
     setBoundry(0,xOld);
-
-    //setBoundry(0,zOld);
-
 
     for(int loop = 0; loop < 20; loop++)
     {
@@ -459,20 +426,6 @@ void Simulation::setBoundry(int b, VectorXf& x)
            x[COFF(0,N+1,N+1)]   = (x[COFF(1,N+1,N+1)]+x[COFF(0,N,N+1)]  +x[COFF(0,N+1,N)])  /3;
            x[COFF(N+1,0,N+1)]   = (x[COFF(N,0,N+1)]  +x[COFF(N+1,1,N+1)]+x[COFF(N+1,0,N)])  /3;
            x[COFF(N+1,N+1,N+1)] = (x[COFF(N,N+1,N+1)]+x[COFF(N+1,N,N+1)]+x[COFF(N+1,N+1,N)])/3;
-
- /*
-    for(int i = 1; i <= fluid_->n; i++)
-    {
-        m.coeffRef(0,i) =               (b==1) ? -m.coeff(1,i) : m.coeff(1,i);
-        m.coeffRef(fluid_->n, i) =    (b==1) ? -m.coeff(fluid_->n-1,i) : m.coeff(fluid_->n-1,i);
-        m.coeffRef(i,0) =               (b==2) ? -m.coeff(i,1) : m.coeff(i,1);
-        m.coeffRef(i, fluid_->n) =    (b==2) ? -m.coeff(i, fluid_->n-1) : m.coeff(i,fluid_->n-1);
-    }
-    m.coeffRef(0,0) =                   0.5f *(m.coeff(1,0) + m.coeff(0,1));
-    m.coeffRef(0,fluid_->n) =           0.5f *(m.coeff(1,fluid_->n) + m.coeff(0, fluid_->n-1));
-    m.coeffRef(fluid_->n,0) =           0.5f *(m.coeff(fluid_->n-1,0) + m.coeff(fluid_->n,1));
-    m.coeffRef(fluid_->n,fluid_->n) =   0.5f *(m.coeff(fluid_->n-1,fluid_->n) + m.coeff(fluid_->n,fluid_->n-1));
-*/
 }
 
 void Simulation::swap(VectorXf &left, VectorXf &right)
@@ -659,6 +612,76 @@ void Simulation::addDensity(int sourceNo)
 //        }
 //    }
 //}
+
+
+void Simulation::addBuoyancy()
+{
+    fluid_->vz3d += -fluid_->fluidDensity3d*params_.buoyancy*params_.timeStep;
+}
+
+void Simulation::smokeEffect()
+{
+    int index;
+    float x,y,z;
+    Eigen::VectorXf cx,cy,cz,cd;
+    int size = (fluid_->n + 2)*(fluid_->n + 2)*(fluid_->n + 2);
+    cx.resize(size);
+    cy.resize(size);
+    cz.resize(size);
+    cd.resize(size);
+
+
+    int n = fluid_->n;
+    for(int i = 1; i <= n; i++)
+    {
+        for(int j = 1; j <= n; j++)
+        {
+            for(int k = 1; k <= n; k++)
+            {
+                index = COFF(i,j,k);
+                x = cx[index] = (fluid_->vz3d[COFF(i,j+1,k)] - fluid_->vz3d[COFF(i,j-1,k)] )*0.5f -
+                                 (fluid_->vy3d[COFF(i,j,k+1)] - fluid_->vy3d[COFF(i,j,k-1)] )*0.5f;
+
+                y = cy[index] = (fluid_->vx3d[COFF(i,j,k+1)] - fluid_->vx3d[COFF(i,j,k-1)] )*0.5f -
+                                 (fluid_->vz3d[COFF(i+1,j,k)] - fluid_->vz3d[COFF(i-1,j,k)] )*0.5f;
+
+                z = cz[index] = (fluid_->vy3d[COFF(i+1,j,k)] - fluid_->vy3d[COFF(i-1,j,k)] )*0.5f -
+                                 (fluid_->vx3d[COFF(i,j+1,k)] - fluid_->vx3d[COFF(i,j-1,k)] )*0.5f;
+
+                cd[index] = sqrt(x*x + y*y + z*z);
+
+            }
+
+        }
+    }
+
+    float Nx, Ny, Nz, len;
+    for(int i = 1; i <= n; i++)
+    {
+        for(int j = 1; j <= n; j++)
+        {
+            for(int k = 1; k <= n; k++)
+            {
+                index = COFF(i,j,k);
+                 Nx = cd[COFF(i+1,j,k)] - cd[COFF(i-1,j,k)]*0.5f;
+                 Nx = cd[COFF(i,j+1,k)] - cd[COFF(i,j-1,k)]*0.5f;
+                 Nx = cd[COFF(i,j,k+1)] - cd[COFF(i,j,k-1)]*0.5f;
+
+                 len = 1.0f/(sqrt(Nx*Nx + Ny*Ny + Nz*Nz) + 0.0000000001f);
+                 Nx *= len;
+                 Ny *= len;
+                 Nz *= len;
+
+                 fluid_->vx3d[index] += (Ny*cz[index] - Nz*cy[index]) * params_.timeStep;
+                 fluid_->vy3d[index] += (Nz*cx[index] - Nx*cz[index]) * params_.timeStep;
+                 fluid_->vz3d[index] += (Nx*cy[index] - Ny*cx[index]) * params_.timeStep;
+
+
+            }
+        }
+    }
+}
+
 
 void Simulation::clearScene()
 {

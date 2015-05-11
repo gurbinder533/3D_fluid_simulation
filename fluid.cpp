@@ -25,31 +25,6 @@ Fluid::Fluid()
     this->vz3d.resize(size);
     this->vz3dOld.resize(size);
 
-    /*
-    this->fluidDensity.resize(this->n+1, this->n+1);
-    this->fluidDensityOld.resize(this->n+1, this->n+1);
-    this->vx.resize(this->n+1, this->n+1);
-    this->vxOld.resize(this->n+1, this->n+1);
-    this->vy.resize(this->n+1, this->n+1);
-    this->vyOld.resize(this->n+1, this->n+1);
-    */
-
-
-    /*
-
-    std::fill(fluidDensity3d.begin(), fluidDensity3d.end(), 0);
-    std::fill(fluidDensity3d.begin(), fluidDensity3d.end(), 0);
-
-    std::fill(vx3d.begin(), vx3d.end(), 0);
-    std::fill(vx3dOld.begin(), vx3dOld.end(), 0);
-
-    std::fill(vy3d.begin(), vy3d.end(), 0);
-    std::fill(vy3dOld.begin(), vy3dOld.end(), 0);
-
-    std::fill(vz3d.begin(), vz3d.end(), 0);
-    std::fill(vz3dOld.begin(), vz3dOld.end(), 0);
-
-    */
 
     fluidDensity3d.setZero();
     fluidDensity3dOld.setZero();

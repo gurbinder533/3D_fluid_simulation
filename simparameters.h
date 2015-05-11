@@ -22,25 +22,8 @@ struct SimParameters
     double diffusionConstant;
     double viscosityFluid;
 
+    float buoyancy;
 
-    ConnectorType connector;
-
-    double springStiffness;
-    double maxSpringStrain;
-    double dampingStiffness;
-
-    double particleMass;
-    bool particleFixed;
-    double maxSpringDist;
-
-    double rodDensity;
-    double rodStretchStiffness;
-    double rodBendingStiffness;
-    int rodSegments;
-
-    double ropeDensity;
-    double ropeBend;
-    double ropeSegments;
 };
 
 #endif // SIMPARAMETERS_H
