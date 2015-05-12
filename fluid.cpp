@@ -117,6 +117,81 @@ void Fluid::render()
     }
 }
 
+
+void Fluid::render_velocity()
+{
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    double xCell = -1;
+    double yCell = 1;
+    double zCell = 1;
+    for(int i =0; i <= n; i++)
+    {
+        xCell = i * this->sizeOfVoxel - 1 ;
+        for(int j = 0; j <= n; j++)
+        {
+            yCell = 1 - j * this->sizeOfVoxel;
+            for(int k = 0; k <= n; k++)
+            {
+                zCell = 1 - k * this->sizeOfVoxel;
+                float velx = vx3d[COFF(i, j, k)];
+                float vely = vy3d[COFF(i, j, k)];
+                float velz = vz3d[COFF(i, j, k)];
+
+                float vel = velx*velx + vely*vely + velz*velz;
+
+
+                if (vel > 0)
+                {
+
+                        glColor4f(255.0, 1.0-vel, 1.0-vel, vel*50*n);
+                }
+                else
+                {
+                    glColor4f(255.0, 255.0, 255.0, 0.0);
+                }
+
+                glBegin(GL_QUADS);
+                {
+
+                    glVertex3f(xCell,yCell, zCell);
+                    glVertex3f(xCell + this->sizeOfVoxel, yCell, zCell);
+                    glVertex3f(xCell + this->sizeOfVoxel, yCell - this->sizeOfVoxel, zCell);
+                    glVertex3f(xCell, yCell - this->sizeOfVoxel, zCell);
+
+                    glVertex3f(xCell,yCell, zCell - this->sizeOfVoxel);
+                    glVertex3f(xCell + this->sizeOfVoxel, yCell, zCell - this->sizeOfVoxel);
+                    glVertex3f(xCell + this->sizeOfVoxel, yCell - this->sizeOfVoxel, zCell - this->sizeOfVoxel);
+                    glVertex3f(xCell, yCell - this->sizeOfVoxel, zCell - this->sizeOfVoxel);
+
+                    glVertex3f(xCell,yCell, zCell);
+                    glVertex3f(xCell + this->sizeOfVoxel, yCell, zCell);
+                    glVertex3f(xCell + this->sizeOfVoxel, yCell , zCell - this->sizeOfVoxel);
+                    glVertex3f(xCell, yCell, zCell - this->sizeOfVoxel);
+
+                    glVertex3f(xCell,yCell - this->sizeOfVoxel, zCell);
+                    glVertex3f(xCell + this->sizeOfVoxel, yCell- this->sizeOfVoxel, zCell);
+                    glVertex3f(xCell + this->sizeOfVoxel, yCell - this->sizeOfVoxel, zCell - this->sizeOfVoxel);
+                    glVertex3f(xCell, yCell - this->sizeOfVoxel, zCell - this->sizeOfVoxel);
+
+                    glVertex3f(xCell,yCell , zCell);
+                    glVertex3f(xCell , yCell- this->sizeOfVoxel, zCell);
+                    glVertex3f(xCell , yCell - this->sizeOfVoxel, zCell - this->sizeOfVoxel);
+                    glVertex3f(xCell, yCell, zCell - this->sizeOfVoxel);
+
+
+                    glVertex3f(xCell +this->sizeOfVoxel,yCell , zCell);
+                    glVertex3f(xCell  +this->sizeOfVoxel , yCell- this->sizeOfVoxel, zCell);
+                    glVertex3f(xCell +this->sizeOfVoxel , yCell - this->sizeOfVoxel, zCell - this->sizeOfVoxel);
+                    glVertex3f(xCell +this->sizeOfVoxel, yCell, zCell - this->sizeOfVoxel);
+                }
+                glEnd();
+            }
+        }
+    }
+}
+
 double Fluid::getTotalDensity()
 {
     double densTotal = 0;

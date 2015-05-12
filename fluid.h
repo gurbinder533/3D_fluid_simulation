@@ -34,6 +34,7 @@ public:
     void zeroEverything();
     double getTotalDensity();
     void render();
+    void render_velocity();
 
 };
 

@@ -99,6 +99,7 @@ void Simulation::render()
 
     renderLock_.lock();
     {
+        fluid_->render_velocity();
         fluid_->render();
     }
     renderLock_.unlock();
@@ -429,16 +430,20 @@ void Simulation::addVelocity(int sourceNo, double velX, double velY, double velZ
 
         int n = fluid_->n;
         //std::cout << "prev: velx " << fluid_->vx3dOld[COFF(i,j,k)] << std::endl;
-        for(i = 0; i <= n; i++)
+       /* for(i = 0; i <= n; i++)
         {
            for(j = 0; j <= n; j++)
             {
+            */
             for(k = 0; k <= n; ++k)
             {
+
+             fluid_->vx3dOld[COFF(i,j,k)] += params_.velocityMagnitude;
              fluid_->vy3dOld[COFF(i,j,k)] += params_.velocityMagnitude;
-            }
-            }
-        }
+             fluid_->vz3dOld[COFF(i,j,k)] += params_.velocityMagnitude;
+             }
+            /*}
+        }*/
         //std::cout << ": velz " << fluid_->vz3dOld[COFF(i,j,k)] << " params: " << params_.velocityMagnitude << std::endl;
 
     }
