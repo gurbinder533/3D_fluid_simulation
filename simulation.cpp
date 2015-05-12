@@ -5,14 +5,12 @@
 #include <Eigen/Geometry>
 #include <QDebug>
 #include <QPainter>
-#include "SOIL.h"
 #include "vectormath.h"
 #include <Eigen/Dense>
 #include <Eigen/Core>
 #include <Eigen/Sparse>
 #include <Eigen/Geometry>
 #include "mesh.h"
-#include "quadprog/eiquadprog.hpp"
 #include <iostream>
 const double PI = 3.1415926535898;
 
@@ -29,40 +27,6 @@ Simulation::~Simulation()
     clearScene();
 }
 
-void Simulation::initializeGL()
-{
-   // std::cout << "intializeGL\n";
-   // loadFloorTexture();
-   // loadWallTexture();
-}
-
-
-void Simulation::loadFloorTexture()
-{
-    floorTex_ = SOIL_load_OGL_texture("resources/grid.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y |  SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT | SOIL_FLAG_MIPMAPS);
-    if(floorTex_ != 0)
-    {
-        glBindTexture(GL_TEXTURE_2D, floorTex_);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    }
-}
-
-void Simulation::loadWallTexture()
-{
-    wallTex_ = SOIL_load_OGL_texture("resources/wall.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y |  SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT | SOIL_FLAG_MIPMAPS);
-    if(wallTex_ != 0)
-    {
-        glBindTexture(GL_TEXTURE_2D, wallTex_);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    }
-}
-
 
 void Simulation::renderPlanes(bool transparent)
 {
@@ -73,12 +37,11 @@ void Simulation::renderPlanes(bool transparent)
 
     glDisable(GL_BLEND);
     glPushMatrix();
-    // construct the cub
 
      glLineWidth(3.0);
         glBegin(GL_LINES);
 
-        glColor3f(1.0, 0.0, 0.0);
+        glColor3f(0.4, 0.4, 0.4);
 
         glVertex3f(-1, -1, -1);
         glVertex3f(-1, 1, -1);
@@ -121,105 +84,9 @@ void Simulation::renderPlanes(bool transparent)
     glPopMatrix();
     glEnable(GL_BLEND);
 
-
-    /*
-    glEnable(GL_CULL_FACE);
-    if(transparent)
-    {
-        glCullFace(GL_FRONT);
-        glColor4f(1.0, 1.0, 1.0, 0.5);
-    }
-    else
-    {
-        glCullFace(GL_BACK);
-        glColor4f(1.0, 1.0, 1.0, 1.0);
-    }
-
-    for(vector<Plane>::iterator it = planes_.begin(); it != planes_.end(); ++it)
-        renderPlane(*it, it == planes_.begin());
-
-    glDisable(GL_CULL_FACE);
-*/
     renderLock_.unlock();
 }
 
-void Simulation::renderPlane(const Plane &p, bool isFloor)
-{
-    /*
-    if(isFloor && floorTex_)
-    {
-        glBindTexture(GL_TEXTURE_2D, floorTex_);
-        glEnable(GL_TEXTURE_2D);
-    }
-    else if(!isFloor && wallTex_)
-    {
-        glBindTexture(GL_TEXTURE_2D, wallTex_);
-        glEnable(GL_TEXTURE_2D);
-    }
-    else
-        glColor3f(0.5, 0.5, 0.5);
-
-    double texsize = 5.0;
-    double gridsize = 1000.0;
-
-    double texmax = gridsize/texsize;
-
-    Vector3d tangent1 = VectorMath::perpToAxis(p.normal);
-    Vector3d tangent2 = tangent1.cross(p.normal);
-
-    Vector3d corner;
-    */
-
-
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glPushMatrix();
-    glTranslatef(0.0f, 0.0f, 6.0f);
-    // construct the cube
-        glBegin(GL_QUADS);
-
-        glColor4f (  0.8,  0.8, 0.8, 0.2);
-        glVertex3f(  0.5, -0.5, 0.5 );
-        glVertex3f(  0.5,  0.5, 0.5 );
-        glVertex3f( -0.5,  0.5, 0.5 );
-        glVertex3f( -0.5, -0.5, 0.5 );
-
-        glColor4f(  1.0,  0.0,  1.0, 0.2);
-        glVertex3f( 0.5, -0.5, -0.5 );
-        glVertex3f( 0.5,  0.5, -0.5 );
-        glVertex3f( 0.5,  0.5,  0.5 );
-        glVertex3f( 0.5, -0.5,  0.5 );
-
-        glColor4f(   0.0,  1.0,  0.0, 0.2);
-        glVertex3f( -0.5, -0.5,  0.5 );
-        glVertex3f( -0.5,  0.5,  0.5 );
-        glVertex3f( -0.5,  0.5, -0.5 );
-        glVertex3f( -0.5, -0.5, -0.5 );
-
-        glColor4f(   0.0,  0.0,  1.0 , 0.2);
-        glVertex3f(  0.5,  0.5,  0.5 );
-        glVertex3f(  0.5,  0.5, -0.5 );
-        glVertex3f( -0.5,  0.5, -0.5 );
-        glVertex3f( -0.5,  0.5,  0.5 );
-
-        glColor4f(   1.0,  0.0,  0.0, 0.2);
-        glVertex3f(  0.5, -0.5, -0.5 );
-        glVertex3f(  0.5, -0.5,  0.5 );
-        glVertex3f( -0.5, -0.5,  0.5 );
-        glVertex3f( -0.5, -0.5, -0.5 );
-
-        glColor4f(   1.0,  1.0, 0.0, 0.2);
-        glVertex3f(  0.5, -0.5, -0.5 );
-        glVertex3f(  0.5,  0.5, -0.5 );
-        glVertex3f( -0.5,  0.5, -0.5 );
-        glVertex3f( -0.5, -0.5, -0.5 );
-
-        glEnd();
-
-    glPopMatrix();
-
-
-}
 
 
 void Simulation::render()
@@ -245,10 +112,7 @@ void Simulation::takeSimulationStep()
 
 void Simulation::fluidSimulationStep()
 {
-//    this->swap(fluid_->fluidDensity3d, fluid_->fluidDensity3dOld);
-//    return;
-
-// Velocity Code
+    // Velocity Code
     addSource(fluid_->vx3d, fluid_->vx3dOld);
     addSource(fluid_->vy3d, fluid_->vy3dOld);
     addSource(fluid_->vz3d, fluid_->vz3dOld);
@@ -272,7 +136,7 @@ void Simulation::fluidSimulationStep()
 
 /*******************ADVECTION*********************************************/
 
-/************************DIFFUSE****************************************/
+/************************DIFFUSE******************************************/
     this->swap(fluid_->vx3d, fluid_->vx3dOld);
     this->swap(fluid_->vy3d, fluid_->vy3dOld);
     this->swap(fluid_->vz3d, fluid_->vz3dOld);
@@ -305,7 +169,7 @@ void Simulation::fluidSimulationStep()
     fluid_->vz3dOld.setZero();
 
 
-    //cout << "fluid density: " << fluid_->getTotalDensity() << endl;
+    cout << "fluid density: " << fluid_->getTotalDensity() << endl;
 }
 
 void Simulation::addSource(Eigen::VectorXf &d, Eigen::VectorXf &dOld)
@@ -515,9 +379,6 @@ void Simulation::advection(int boundry, VectorXf &d, VectorXf &dOld, VectorXf &x
                 v1 = sx0 * (sy0 * dOld[COFF(i0, j0, k1)] + sy1 * dOld[COFF(i0,j1,k1)]) + sx1*(sy0*dOld[COFF(i1,j0,k1)] + sy1*dOld[COFF(i1,j1,k1)]);
 
                 d[COFF(i,j,k)] = sz0*v0 + sz1*v1;
-                /*d.coeffRef(i,j) = s0 * (t0 * dOld.coeff(i0, j0) + t1 * dOld.coeff(i0,j1))
-                        + s1 * (t0 * dOld.coeff(i1,j0) + t1 * dOld.coeff(i1, j1));
-                        */
            }
         }
     }
@@ -539,9 +400,9 @@ void Simulation::addDensity(int sourceNo)
     if (sourceNo == 2)
     {
         fluid_->type = 1;
-        int i = fluid_->n -1;
-        int j = (fluid_->n - 1)/2;
-        int k = fluid_->n -1;
+        int i = fluid_->n-1;
+        int j = fluid_->n-1;
+        int k = fluid_->n-1;
         cout << "HERE2 : " << COFF(i,j,k) << endl;
         fluid_->fluidDensity3dOld[COFF(i,j,k)] += params_.densityMagnitude;
 
@@ -562,54 +423,29 @@ void Simulation::addVelocity(int sourceNo, double velX, double velY, double velZ
 {
     if(sourceNo == 1)
     {
-        int i = fluid_->n -1;
+        int i = (fluid_->n -1)/2;
         int j = (fluid_->n - 1)/2;
-        int k = fluid_->n -1;
+        int k = (fluid_->n -1)/2;
 
-        std::cout << "prev: velx" << fluid_->vx3dOld[COFF(i,j,k)] << std::endl;
-        //fluid_->vx3dOld[COFF(i,j,k)] += velX;
-        //fluid_->vy3dOld[COFF(i,j,k)] += velY;
-        fluid_->vz3dOld[COFF(i,j,k)] += (velZ + 1000);
-         std::cout << ": velx" << fluid_->vx3dOld[COFF(i,j,k)] << std::endl;
+        int n = fluid_->n;
+        //std::cout << "prev: velx " << fluid_->vx3dOld[COFF(i,j,k)] << std::endl;
+        for(i = 0; i <= n; i++)
+        {
+           for(j = 0; j <= n; j++)
+            {
+            for(k = 0; k <= n; ++k)
+            {
+             fluid_->vy3dOld[COFF(i,j,k)] += params_.velocityMagnitude;
+            }
+            }
+        }
+        //std::cout << ": velz " << fluid_->vz3dOld[COFF(i,j,k)] << " params: " << params_.velocityMagnitude << std::endl;
 
     }
 
 
 }
 
-//    int i = floor((x+1)/fluid_->sizeOfVoxel);
-//    int j = -1* floor((y-1)/fluid_->sizeOfVoxel);
-//    if(i >= 0 && i <fluid_->n && j >= 0 && j < fluid_->n)
-//    {
-//        fluid_->vxOld.coeffRef(i,j) += velX;
-//        fluid_->vyOld.coeffRef(i,j) += velY;
-//    }
-//    for(int r = 1; r <= params_.velocityRadius; r++)
-//    {
-//        if(i-r >= 0 && i+r <fluid_->n && j-r >= 0 && j+r < fluid_->n)
-//        {
-//            cout<<"Here : "<<velX<<" : "<<velY<<endl;
-//            fluid_->vxOld.coeffRef(i-r,j-r) += velX;
-//            fluid_->vxOld.coeffRef(i-r,j) += velX;
-//            fluid_->vxOld.coeffRef(i-r,j+r) += velX;
-//            fluid_->vxOld.coeffRef(i,j+r) += velX;
-//            fluid_->vxOld.coeffRef(i+r,j+r) += velX;
-//            fluid_->vxOld.coeffRef(i+r,j) += velX;
-//            fluid_->vxOld.coeffRef(i+r,j-r) += velX;
-//            fluid_->vxOld.coeffRef(i,j-r) += velX;
-
-//            fluid_->vyOld.coeffRef(i,j) += velY;
-//            fluid_->vyOld.coeffRef(i-r,j-r) += velY;
-//            fluid_->vyOld.coeffRef(i-r,j) += velY;
-//            fluid_->vyOld.coeffRef(i-r,j+r) += velY;
-//            fluid_->vyOld.coeffRef(i,j+r) += velY;
-//            fluid_->vyOld.coeffRef(i+r,j+r) += velY;
-//            fluid_->vyOld.coeffRef(i+r,j) += velY;
-//            fluid_->vyOld.coeffRef(i+r,j-r) += velY;
-//            fluid_->vyOld.coeffRef(i,j-r) += velY;
-//        }
-//    }
-//}
 
 
 void Simulation::addBuoyancy()
@@ -685,11 +521,6 @@ void Simulation::clearScene()
 {
     renderLock_.lock();
     {
-
-        Plane groundPlane;
-        groundPlane.pos << 0,0,0;
-        groundPlane.normal << 0,0,1;
-        planes_.push_back(groundPlane);
         fluid_->zeroEverything();
     }
     renderLock_.unlock();

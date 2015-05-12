@@ -10,7 +10,6 @@
 #include <QGLWidget>
 #include "fluid.h"
 
-typedef Eigen::Triplet<double> Tr;
 
 class SimParameters;
 
@@ -27,7 +26,6 @@ public:
     ~Simulation();
 
     void takeSimulationStep();
-    void initializeGL();
 
     // FLUID STUFF
 ///////////////////////////////////////////////
@@ -51,11 +49,6 @@ public:
     void clearScene();
 
 private:
-    void loadFloorTexture();
-    void loadWallTexture();
-
-    void renderPlane(const Plane &p, bool isFloor);
-
 
     const SimParameters &params_;
     QMutex renderLock_;
@@ -66,21 +59,9 @@ private:
 
     ////FLUID STUFF
     Fluid *fluid_;
-    void buildConfiguration(Eigen::VectorXd &q, Eigen::VectorXd &qprev, Eigen::VectorXd &v);
-    void unbuildConfiguration(const Eigen::VectorXd &q, const Eigen::VectorXd &v);
-    void computeForceAndHessian(const Eigen::VectorXd &q, const Eigen::VectorXd &qprev, Eigen::VectorXd &F, Eigen::SparseMatrix<double> &H, Eigen::VectorXd &v);
-    void computeMassInverse(Eigen::SparseMatrix<double> &Minv);
-    Eigen::SparseMatrix<double> computeGradGTranspose(const Eigen::VectorXd &q);
-
-    void numericalIntegration(Eigen::VectorXd &q, Eigen::VectorXd &qprev, Eigen::VectorXd &v);
-    void computeStepProject(Eigen::VectorXd &q, Eigen::VectorXd &oldq, Eigen::VectorXd &v);
-    void computeLagrangeMultipliers(const Eigen::VectorXd &q, const Eigen::VectorXd &F, Eigen::VectorXd &v);
-
-
     ////////////
 
 
-    std::vector<Plane> planes_;
 };
 
 #endif // SIMULATION_H

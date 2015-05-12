@@ -17,9 +17,8 @@ public:
     Controller(int fps);
     virtual ~Controller();
     void initialize(MainWindow *mw);
-    void initializeGL();
     void renderPlanes(bool transparent);
-    void renderObjects();
+
 
 public slots:
     void reset();

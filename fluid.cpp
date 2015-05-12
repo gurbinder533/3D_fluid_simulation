@@ -40,19 +40,6 @@ Fluid::Fluid()
     this->sizeOfVoxel = 2.0/(this->n+1);
     this->debug = true;
 
-//     for(int i = 0; i < n; ++i)
-//     {
-//         for(int j = 0; j < n; ++j)
-//         {
-//             for(int k = 0; k < n; ++k)
-//             {
-//                //std::cout << COFF(i,j,0) << "\n";
-//                this->fluidDensity3d[COFF(i,j,k)] = 255.0;
-//             }
-//         }
-
-//     }
-
 }
 
 void Fluid::render()
@@ -81,25 +68,14 @@ void Fluid::render()
 
                 if (dens > 0)
                 {
-                    //glColor4f(255.0-dens, 255.0-dens, 255.0, 0.2);
-                    if(type == 0) // blue
-                    {
-                        glColor4f(1.0-dens, 1.0-dens, 255.0, dens*20*n);
+
+                        glColor4f(1.0-dens, 1.0-dens, 255.0, dens*50*n);
 //                      glColor4f(0, 0, 255.0, 1);
-                    }
-                    else if(type == 1)
-                    {
-                       glColor4f(255.0, 1.0-dens, 1.0 - dens, dens*20*n);
-                    }
                 }
                 else
                 {
                     glColor4f(255.0, 255.0, 255.0, 0.0);
                 }
-
-                //glColor3f(1,0,0);
-                //std::cout << " xcell " << xCell << " , ycell " << yCell << " , zCell " << zCell << "\n";
-                //std::cout << " Voxel size : " << this->sizeOfVoxel << "\n";
 
                 glBegin(GL_QUADS);
                 {
@@ -159,20 +135,6 @@ double Fluid::getTotalDensity()
 
 void Fluid::zeroEverything()
 {
-
-/*
-    std::fill(fluidDensity3d.begin(), fluidDensity3d.end(), 0);
-    std::fill(fluidDensity3d.begin(), fluidDensity3d.end(), 0);
-
-    std::fill(vx3d.begin(), vx3d.end(), 0);
-    std::fill(vx3dOld.begin(), vx3dOld.end(), 0);
-
-    std::fill(vy3d.begin(), vy3d.end(), 0);
-    std::fill(vy3dOld.begin(), vy3dOld.end(), 0);
-
-    std::fill(vz3d.begin(), vz3d.end(), 0);
-    std::fill(vz3dOld.begin(), vz3dOld.end(), 0);
-*/
 
     fluidDensity3d.setZero();
     fluidDensity3dOld.setZero();

@@ -152,7 +152,7 @@ public:
 
     void retranslateUi(QMainWindow *MainWindow)
     {
-        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "Furious Birds", 0, QApplication::UnicodeUTF8));
+        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "Fluid3d", 0, QApplication::UnicodeUTF8));
         actionExit->setText(QApplication::translate("MainWindow", "Exit", 0, QApplication::UnicodeUTF8));
         actionReset->setText(QApplication::translate("MainWindow", "Clear Scene", 0, QApplication::UnicodeUTF8));
         actionReset_Everything->setText(QApplication::translate("MainWindow", "Reset Everything", 0, QApplication::UnicodeUTF8));
@@ -162,13 +162,13 @@ public:
         timeStepEdit->setText(QApplication::translate("MainWindow", "0.001", 0, QApplication::UnicodeUTF8));
         clearScene->setText(QApplication::translate("MainWindow", "Clear Scene", 0, QApplication::UnicodeUTF8));
         label->setText(QApplication::translate("MainWindow", "Diffusion Coff", 0, QApplication::UnicodeUTF8));
-        diffusionK->setText(QApplication::translate("MainWindow", "0.03", 0, QApplication::UnicodeUTF8));
+        diffusionK->setText(QApplication::translate("MainWindow", "0.02", 0, QApplication::UnicodeUTF8));
         viscosityK->setText(QApplication::translate("MainWindow", "0.2", 0, QApplication::UnicodeUTF8));
         label_2->setText(QApplication::translate("MainWindow", "Viscosity Coff", 0, QApplication::UnicodeUTF8));
         De->setText(QApplication::translate("MainWindow", "Density Magnitude", 0, QApplication::UnicodeUTF8));
         label_4->setText(QApplication::translate("MainWindow", "Velocity Magnitude", 0, QApplication::UnicodeUTF8));
         densityMag->setText(QApplication::translate("MainWindow", "200", 0, QApplication::UnicodeUTF8));
-        velocityMag->setText(QApplication::translate("MainWindow", "200", 0, QApplication::UnicodeUTF8));
+        velocityMag->setText(QApplication::translate("MainWindow", "20", 0, QApplication::UnicodeUTF8));
         SimulationVar->setTitle(QApplication::translate("MainWindow", "Simulation Variables", 0, QApplication::UnicodeUTF8));
         source1->setText(QApplication::translate("MainWindow", "Source1", 0, QApplication::UnicodeUTF8));
         source2->setText(QApplication::translate("MainWindow", "Source2", 0, QApplication::UnicodeUTF8));

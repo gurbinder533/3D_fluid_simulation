@@ -25,6 +25,7 @@ void GLPanel::initializeGL()
     glClearColor(1.0, 1.0, 1.0, 0.0);
     glClearDepth(1.0);
     glDisable(GL_DEPTH_TEST);
+    glCullFace(GL_BACK);
     glCullFace(GL_FRONT);
     glDepthFunc(GL_LEQUAL);
     glEnable(GL_LIGHTING);
@@ -35,7 +36,6 @@ void GLPanel::initializeGL()
     glEnable(GL_COLOR_MATERIAL);
     glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-    cont_->initializeGL();
 }
 
 void GLPanel::resizeGL(int w, int h)
@@ -67,63 +67,16 @@ void GLPanel::paintGL()
     cont_->renderPlanes(false);
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
-    cont_->renderObjects();
+
 
     glPushMatrix();
     glEnable(GL_POLYGON_OFFSET_FILL);
     glPolygonOffset(-1.0, -1.0);
     glDisable(GL_LIGHT0);
-    multShadowMatrix();
-    cont_->renderObjects();
     glDisable(GL_POLYGON_OFFSET_FILL);
     glPopMatrix();
 
-    cont_->renderPlanes(true);
-
     cont_->renderFluid();
-}
-
-void GLPanel::multShadowMatrix()
-{
-    float light[4];
-    float ground[4];
-
-    for(int i=0; i<4; i++)
-    {
-        light[i] = lightPos_[i];
-        ground[i] = 0;
-    }
-    ground[2] = 1.0;
-
-    float  dot;
-    float  shadowMat[4][4];
-
-    dot = ground[0] * light[0] +
-          ground[1] * light[1] +
-          ground[2] * light[2] +
-          ground[3] * light[3];
-
-    shadowMat[0][0] = dot - light[0] * ground[0];
-    shadowMat[1][0] = 0.0 - light[0] * ground[1];
-    shadowMat[2][0] = 0.0 - light[0] * ground[2];
-    shadowMat[3][0] = 0.0 - light[0] * ground[3];
-
-    shadowMat[0][1] = 0.0 - light[1] * ground[0];
-    shadowMat[1][1] = dot - light[1] * ground[1];
-    shadowMat[2][1] = 0.0 - light[1] * ground[2];
-    shadowMat[3][1] = 0.0 - light[1] * ground[3];
-
-    shadowMat[0][2] = 0.0 - light[2] * ground[0];
-    shadowMat[1][2] = 0.0 - light[2] * ground[1];
-    shadowMat[2][2] = dot - light[2] * ground[2];
-    shadowMat[3][2] = 0.0 - light[2] * ground[3];
-
-    shadowMat[0][3] = 0.0 - light[3] * ground[0];
-    shadowMat[1][3] = 0.0 - light[3] * ground[1];
-    shadowMat[2][3] = 0.0 - light[3] * ground[2];
-    shadowMat[3][3] = dot - light[3] * ground[3];
-
-    glMultMatrixf((const GLfloat*)shadowMat);
 }
 
 void GLPanel::scaleMousePos(int x, int y, double &scaledx, double &scaledy) const
@@ -158,15 +111,6 @@ void GLPanel::mousePressEvent(QMouseEvent *event)
         rotator_.startRotation(pos);
         break;
     }
-    case MA_LAUNCH:
-    {
-        Vector3d pos = c_.getEye();
-        Vector3d right, up, center;
-        c_.getSpanningSet(right, up, center);
-        //QMetaObject::invokeMethod(cont_, "leftMouseClicked", Q_ARG(double, pos[0]), Q_ARG(double, pos[1]));
-        //MetaObject::invokeMethod(cont_, "mouseClicked", Q_ARG(double, pos[0]), Q_ARG(double, pos[1]), Q_ARG(double, pos[2]), Q_ARG(double, center[0]), Q_ARG(double, center[1]), Q_ARG(double, center[2]));
-        break;
-    }
     default:
         break;
     }
@@ -179,11 +123,6 @@ void GLPanel::mouseMoveEvent(QMouseEvent *event)
     Vector2d pos;
     scaleMousePos(x,y,pos[0],pos[1]);
     rotator_.updateRotation(pos);
-
-    double x_d = -1.0 + 2.0*double(x)/double(width());
-    double y_d = 1.0 - 2.0*double(y)/double(height());
-
-    //QMetaObject::invokeMethod(cont_, "mouseDrag", Q_ARG(double, x_d), Q_ARG(double, y_d));
 }
 
 void GLPanel::mouseReleaseEvent(QMouseEvent *event)

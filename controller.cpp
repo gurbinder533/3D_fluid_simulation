@@ -24,10 +24,6 @@ void Controller::initialize(MainWindow *mw)
     dragYOld = 0.0;
 }
 
-void Controller::initializeGL()
-{
-    sim_->initializeGL();
-}
 
 void Controller::run()
 {
@@ -64,10 +60,7 @@ void Controller::renderFluid()
 {
     sim_->render();
 }
-void Controller::renderObjects()
-{
-    //sim_->renderObjects();
-}
+
 
 void Controller::mouseClicked(double x, double y, double z, double dx, double dy, double dz)
 {

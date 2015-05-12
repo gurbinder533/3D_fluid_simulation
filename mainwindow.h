@@ -24,57 +24,7 @@ public slots:
 
 private slots:
     void updateGL();
-/*
-    void on_actionExit_triggered();
 
-    void on_actionReset_Everything_triggered();
-
-    void on_actionReset_triggered();
-
-    void on_startSimulationButton_clicked();
-
-    void on_startGameModeButton_clicked();
-
-    void on_timeStepEdit_editingFinished();
-
-    void on_newtonTolEdit_editingFinished();
-
-    void on_newtonMaxItersEdit_editingFinished();
-
-    void on_gravityCheckBox_clicked();
-
-    void on_gravityGEdit_editingFinished();
-
-    void on_frictionCheckBox_clicked();
-
-    void on_coeffRestitutionEdit_editingFinished();
-
-    void on_coeffFrictionEdit_editingFinished();
-
-    void on_sphereButton_clicked();
-
-    void on_twoByFourButton_clicked();
-
-    void on_bunnyButton_clicked();
-
-    void on_customButton_clicked();
-
-    void on_planeButton_clicked();
-
-    void on_launchVelEdit_editingFinished();
-
-    void on_randomOrienatationCheckBox_clicked();
-
-    void on_randomAngularVelCheckBox_clicked();
-
-    void on_randomVelMagEdit_editingFinished();
-
-    void on_densityEdit_editingFinished();
-
-    void on_penaltyStiffnessEdit_editingFinished();
-
-    void on_tempSlider_sliderReleased();
-*/
     void on_Simulate_clicked();
 
     void on_timeStepEdit_editingFinished();

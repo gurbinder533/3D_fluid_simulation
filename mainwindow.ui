@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Furious Birds</string>
+   <string>Fluid3d</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="GLPanel" name="GLWidget" native="true">
@@ -135,7 +135,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>0.03</string>
+       <string>0.02</string>
       </property>
      </widget>
      <widget class="QLineEdit" name="viscosityK">
@@ -213,7 +213,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>200</string>
+       <string>20</string>
       </property>
      </widget>
     </widget>
