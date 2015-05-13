@@ -139,8 +139,8 @@ void Fluid::render_velocity()
                 float vely = vy3d[COFF(i, j, k)];
                 float velz = vz3d[COFF(i, j, k)];
 
-                float vel = velx*velx + vely*vely + velz*velz;
-
+                //float vel = sqrt(velx*velx + vely*vely + velz*velz);
+                float vel = (velx*velx + vely*vely + velz*velz);
 
                 if (vel > 0)
                 {

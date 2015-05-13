@@ -394,7 +394,7 @@ void Simulation::addDensity(int sourceNo)
         int i = 1;
         int j = 1;
         int k = 1;
-        cout << "HERE1 : " << COFF(i,j,k) << endl;
+        //cout << "HERE1 : " << COFF(i,j,k) << endl;
         fluid_->fluidDensity3dOld[COFF(i,j,k)] += params_.densityMagnitude;
 
     }
@@ -404,7 +404,7 @@ void Simulation::addDensity(int sourceNo)
         int i = fluid_->n-1;
         int j = fluid_->n-1;
         int k = fluid_->n-1;
-        cout << "HERE2 : " << COFF(i,j,k) << endl;
+        //cout << "HERE2 : " << COFF(i,j,k) << endl;
         fluid_->fluidDensity3dOld[COFF(i,j,k)] += params_.densityMagnitude;
 
     }
@@ -414,7 +414,7 @@ void Simulation::addDensity(int sourceNo)
         int i = (fluid_->n-1)/2;
         int j = (fluid_->n-1)/2;
         int k = (fluid_->n-1)/2;
-        cout << "HERE2 : " << COFF(i,j,k) << endl;
+        //cout << "HERE2 : " << COFF(i,j,k) << endl;
         fluid_->fluidDensity3dOld[COFF(i,j,k)] += params_.densityMagnitude;
 
     }
@@ -424,7 +424,7 @@ void Simulation::addDensity(int sourceNo)
         int i = (fluid_->n-1)/2;
         int j = (fluid_->n-1)/2;
         int k = (fluid_->n-1);
-        cout << "HERE2 : " << COFF(i,j,k) << endl;
+        //cout << "HERE2 : " << COFF(i,j,k) << endl;
         fluid_->fluidDensity3dOld[COFF(i,j,k)] += params_.densityMagnitude;
 
     }
