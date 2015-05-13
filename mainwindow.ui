@@ -229,10 +229,13 @@
      <property name="title">
       <string>Simulation Variables</string>
      </property>
+     <property name="checkable">
+      <bool>false</bool>
+     </property>
      <widget class="QCheckBox" name="source1">
       <property name="geometry">
        <rect>
-        <x>20</x>
+        <x>0</x>
         <y>50</y>
         <width>95</width>
         <height>26</height>
@@ -251,7 +254,7 @@
      <widget class="QCheckBox" name="source2">
       <property name="geometry">
        <rect>
-        <x>120</x>
+        <x>99</x>
         <y>50</y>
         <width>95</width>
         <height>26</height>
@@ -264,7 +267,7 @@
      <widget class="QCheckBox" name="source3">
       <property name="geometry">
        <rect>
-        <x>240</x>
+        <x>200</x>
         <y>50</y>
         <width>95</width>
         <height>26</height>
@@ -272,6 +275,61 @@
       </property>
       <property name="text">
        <string>Source3</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="source4">
+      <property name="geometry">
+       <rect>
+        <x>305</x>
+        <y>52</y>
+        <width>95</width>
+        <height>26</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Source4</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="velSrc1">
+      <property name="geometry">
+       <rect>
+        <x>1</x>
+        <y>114</y>
+        <width>111</width>
+        <height>26</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>VelocitySrc1</string>
+      </property>
+      <property name="checked">
+       <bool>false</bool>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="velSrc2">
+      <property name="geometry">
+       <rect>
+        <x>121</x>
+        <y>116</y>
+        <width>111</width>
+        <height>26</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>VelocitySrc2</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="velSrc3">
+      <property name="geometry">
+       <rect>
+        <x>257</x>
+        <y>117</y>
+        <width>111</width>
+        <height>26</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>VelocitySrc3</string>
       </property>
      </widget>
     </widget>

@@ -170,7 +170,7 @@ void Simulation::fluidSimulationStep()
     fluid_->vz3dOld.setZero();
 
 
-    cout << "fluid density: " << fluid_->getTotalDensity() << endl;
+    //cout << "fluid density: " << fluid_->getTotalDensity() << endl;
 }
 
 void Simulation::addSource(Eigen::VectorXf &d, Eigen::VectorXf &dOld)
@@ -418,9 +418,19 @@ void Simulation::addDensity(int sourceNo)
         fluid_->fluidDensity3dOld[COFF(i,j,k)] += params_.densityMagnitude;
 
     }
+    if (sourceNo == 4)
+    {
+        fluid_->type = 1;
+        int i = (fluid_->n-1)/2;
+        int j = (fluid_->n-1)/2;
+        int k = (fluid_->n-1);
+        cout << "HERE2 : " << COFF(i,j,k) << endl;
+        fluid_->fluidDensity3dOld[COFF(i,j,k)] += params_.densityMagnitude;
+
+    }
 }
 
-void Simulation::addVelocity(int sourceNo, double velX, double velY, double velZ)
+void Simulation::addVelocity(int sourceNo)
 {
     if(sourceNo == 1)
     {
@@ -429,25 +439,45 @@ void Simulation::addVelocity(int sourceNo, double velX, double velY, double velZ
         int k = (fluid_->n -1)/2;
 
         int n = fluid_->n;
-        //std::cout << "prev: velx " << fluid_->vx3dOld[COFF(i,j,k)] << std::endl;
-       /* for(i = 0; i <= n; i++)
-        {
-           for(j = 0; j <= n; j++)
-            {
-            */
+
             for(k = 0; k <= n; ++k)
             {
 
              fluid_->vx3dOld[COFF(i,j,k)] += params_.velocityMagnitude;
              fluid_->vy3dOld[COFF(i,j,k)] += params_.velocityMagnitude;
              fluid_->vz3dOld[COFF(i,j,k)] += params_.velocityMagnitude;
-             }
-            /*}
-        }*/
-        //std::cout << ": velz " << fluid_->vz3dOld[COFF(i,j,k)] << " params: " << params_.velocityMagnitude << std::endl;
-
+            }
     }
+    if(sourceNo == 2)
+    {
+        int i = (fluid_->n -1)/2;
+        int j = (fluid_->n - 1)/2;
+        int k = (fluid_->n -1)/2;
 
+        int n = fluid_->n;
+            for(i = 0; i <= n; ++i)
+            {
+
+             fluid_->vx3dOld[COFF(i,j,k)] += params_.velocityMagnitude;
+             fluid_->vy3dOld[COFF(i,j,k)] += params_.velocityMagnitude;
+             fluid_->vz3dOld[COFF(i,j,k)] += params_.velocityMagnitude;
+             }
+    }
+    if(sourceNo == 3)
+    {
+        int i = (fluid_->n -1)/2;
+        int j = (fluid_->n - 1)/2;
+        int k = (fluid_->n -1)/2;
+
+        int n = fluid_->n;
+            for(j = 0; j <= n; ++j)
+            {
+
+             fluid_->vx3dOld[COFF(i,j,k)] += params_.velocityMagnitude;
+             fluid_->vy3dOld[COFF(i,j,k)] += params_.velocityMagnitude;
+             fluid_->vz3dOld[COFF(i,j,k)] += params_.velocityMagnitude;
+             }
+    }
 
 }
 

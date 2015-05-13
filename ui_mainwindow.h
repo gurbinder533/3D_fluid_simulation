@@ -54,6 +54,10 @@ public:
     QCheckBox *source1;
     QCheckBox *source2;
     QCheckBox *source3;
+    QCheckBox *source4;
+    QCheckBox *velSrc1;
+    QCheckBox *velSrc2;
+    QCheckBox *velSrc3;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
 
@@ -126,17 +130,31 @@ public:
         SimulationVar = new QGroupBox(parameterFrame);
         SimulationVar->setObjectName(QString::fromUtf8("SimulationVar"));
         SimulationVar->setGeometry(QRect(10, 360, 421, 361));
+        SimulationVar->setCheckable(false);
         source1 = new QCheckBox(SimulationVar);
         source1->setObjectName(QString::fromUtf8("source1"));
-        source1->setGeometry(QRect(20, 50, 95, 26));
+        source1->setGeometry(QRect(0, 50, 95, 26));
         source1->setAcceptDrops(false);
         source1->setChecked(true);
         source2 = new QCheckBox(SimulationVar);
         source2->setObjectName(QString::fromUtf8("source2"));
-        source2->setGeometry(QRect(120, 50, 95, 26));
+        source2->setGeometry(QRect(99, 50, 95, 26));
         source3 = new QCheckBox(SimulationVar);
         source3->setObjectName(QString::fromUtf8("source3"));
-        source3->setGeometry(QRect(240, 50, 95, 26));
+        source3->setGeometry(QRect(200, 50, 95, 26));
+        source4 = new QCheckBox(SimulationVar);
+        source4->setObjectName(QString::fromUtf8("source4"));
+        source4->setGeometry(QRect(305, 52, 95, 26));
+        velSrc1 = new QCheckBox(SimulationVar);
+        velSrc1->setObjectName(QString::fromUtf8("velSrc1"));
+        velSrc1->setGeometry(QRect(1, 114, 111, 26));
+        velSrc1->setChecked(false);
+        velSrc2 = new QCheckBox(SimulationVar);
+        velSrc2->setObjectName(QString::fromUtf8("velSrc2"));
+        velSrc2->setGeometry(QRect(121, 116, 111, 26));
+        velSrc3 = new QCheckBox(SimulationVar);
+        velSrc3->setObjectName(QString::fromUtf8("velSrc3"));
+        velSrc3->setGeometry(QRect(257, 117, 111, 26));
         MainWindow->setCentralWidget(centralWidget);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QString::fromUtf8("mainToolBar"));
@@ -173,6 +191,10 @@ public:
         source1->setText(QApplication::translate("MainWindow", "Source1", 0, QApplication::UnicodeUTF8));
         source2->setText(QApplication::translate("MainWindow", "Source2", 0, QApplication::UnicodeUTF8));
         source3->setText(QApplication::translate("MainWindow", "Source3", 0, QApplication::UnicodeUTF8));
+        source4->setText(QApplication::translate("MainWindow", "Source4", 0, QApplication::UnicodeUTF8));
+        velSrc1->setText(QApplication::translate("MainWindow", "VelocitySrc1", 0, QApplication::UnicodeUTF8));
+        velSrc2->setText(QApplication::translate("MainWindow", "VelocitySrc2", 0, QApplication::UnicodeUTF8));
+        velSrc3->setText(QApplication::translate("MainWindow", "VelocitySrc3", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };

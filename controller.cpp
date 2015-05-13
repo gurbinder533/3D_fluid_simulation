@@ -127,19 +127,26 @@ void Controller::leftMouseClicked(double x, double y)
 
 void Controller::keyToAddVel(int i, double velX, double velY, double velZ)
 {
-    std::cout << "V pressed" << std::endl;
-    sim_->addVelocity(i, velX, velY, velZ);
+    //std::cout << "V pressed" << std::endl;
+    if(params_.velsource1)
+        sim_->addVelocity(1);
+    if(params_.velsource2)
+        sim_->addVelocity(2);
+    if(params_.velsource3)
+        sim_->addVelocity(3);
 }
 
 void Controller::keyToAddFluid(int i)
 {
-    std::cout << " Q pressed  " << i << " \n";
-    std::cout << std::endl;
+    //std::cout << " Q pressed  " << i << " \n";
+    //std::cout << std::endl;
     if(params_.source2)
         sim_->addDensity(1);
     if(params_.source1)
         sim_->addDensity(2);
     if(params_.source3)
         sim_->addDensity(3);
+    if(params_.source4)
+        sim_->addDensity(4);
 
 }

@@ -16,4 +16,9 @@ SimParameters::SimParameters()
     source1 = true;
     source2 = false;
     source3 = false;
+    source4 = false;
+
+    velsource1 = false;
+    velsource2 = false;
+    velsource3 = false;
 }

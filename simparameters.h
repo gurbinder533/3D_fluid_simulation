@@ -27,6 +27,11 @@ struct SimParameters
     bool source1;
     bool source2;
     bool source3;
+    bool source4;
+
+    bool velsource1;
+    bool velsource2;
+    bool velsource3;
 
 
 };

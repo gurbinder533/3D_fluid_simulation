@@ -43,6 +43,14 @@ private slots:
 
     void on_densityMag_editingFinished();
 
+    void on_source4_clicked();
+
+    void on_velSrc1_clicked();
+
+    void on_velSrc2_clicked();
+
+    void on_velSrc3_clicked();
+
 private:
     Controller &cont_;
     Ui::MainWindow *ui;

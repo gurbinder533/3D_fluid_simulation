@@ -36,6 +36,11 @@ void MainWindow::setParametersFromUI()
     params.source1 = ui->source1->isChecked();
     params.source2 = ui->source2->isChecked();
     params.source3 = ui->source3->isChecked();
+    params.source4 = ui->source4->isChecked();
+
+    params.velsource1 = ui->velSrc1->isChecked();
+    params.velsource2 = ui->velSrc2->isChecked();
+    params.velsource3 = ui->velSrc3->isChecked();
 
     params.diffusionConstant = ui->diffusionK->text().toDouble();
     params.viscosityFluid = ui->viscosityK->text().toDouble();
@@ -120,4 +125,24 @@ void MainWindow::on_viscosityK_editingFinished()
 void MainWindow::on_densityMag_editingFinished()
 {
     setParametersFromUI();
+}
+
+void MainWindow::on_source4_clicked()
+{
+    setParametersFromUI();
+}
+
+void MainWindow::on_velSrc1_clicked()
+{
+     setParametersFromUI();
+}
+
+void MainWindow::on_velSrc2_clicked()
+{
+     setParametersFromUI();
+}
+
+void MainWindow::on_velSrc3_clicked()
+{
+     setParametersFromUI();
 }

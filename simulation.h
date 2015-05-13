@@ -37,7 +37,7 @@ public:
    void project(Eigen::VectorXf &x, Eigen::VectorXf &y,Eigen::VectorXf &z, Eigen::VectorXf &xOld, Eigen::VectorXf &yOld, Eigen::VectorXf &zOld);
    void swap(Eigen::VectorXf &left, Eigen::VectorXf &right);
    void addSource(Eigen::VectorXf &d, Eigen::VectorXf& dOld);
-   void addVelocity(int sourceNo, double velX, double velY, double velZ);
+   void addVelocity(int sourceNo);
    void addDensity(int sourceNo);
    void setBoundry(int b, Eigen::VectorXf& m);
    void addBuoyancy();
