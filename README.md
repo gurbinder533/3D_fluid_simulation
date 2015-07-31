@@ -1,6 +1,5 @@
 3D Fluid Simulation
-Authors: Gurbinder Gill (gill@cs.utexas.edu)
-	 Saumyajit Gupta
+Authors: Gurbinder Gill (gill@cs.utexas.edu) and Saumyajit Gupta
 =================================================================
 
 Run the project by opening up fluid3d.pro in QT and pressing 'run'.
